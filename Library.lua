@@ -165,26 +165,30 @@ function Library:MakeDraggable(Instance, Cutoff)
     Instance.Active = true;
 
     Instance.InputBegan:Connect(function(Input)
-        if Input.UserInputType == Enum.UserInputType.MouseButton1 then
-            local ObjPos = Vector2.new(
-                Mouse.X - Instance.AbsolutePosition.X,
-                Mouse.Y - Instance.AbsolutePosition.Y
-            );
+        if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
+            local StartPos = Instance.Position
+            local ObjPos = Input.Position
 
-            if ObjPos.Y > (Cutoff or 40) then
+            if (Input.Position.Y - Instance.AbsolutePosition.Y) > (Cutoff or 40) then
                 return;
             end;
 
-            while InputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) do
-                Instance.Position = UDim2.new(
-                    0,
-                    Mouse.X - ObjPos.X + (Instance.Size.X.Offset * Instance.AnchorPoint.X),
-                    0,
-                    Mouse.Y - ObjPos.Y + (Instance.Size.Y.Offset * Instance.AnchorPoint.Y)
-                );
-
-                RenderStepped:Wait();
-            end;
+            local MoveCon
+            local EndCon
+            
+            MoveCon = InputService.InputChanged:Connect(function(MoveInput)
+                if MoveInput.UserInputType == Enum.UserInputType.MouseMovement or MoveInput.UserInputType == Enum.UserInputType.Touch then
+                    local Delta = MoveInput.Position - ObjPos
+                    Instance.Position = UDim2.new(StartPos.X.Scale, StartPos.X.Offset + Delta.X, StartPos.Y.Scale, StartPos.Y.Offset + Delta.Y)
+                end
+            end)
+            
+            EndCon = InputService.InputEnded:Connect(function(EndInput)
+                if EndInput.UserInputType == Enum.UserInputType.MouseButton1 or EndInput.UserInputType == Enum.UserInputType.Touch then
+                    MoveCon:Disconnect()
+                    EndCon:Disconnect()
+                end
+            end)
         end;
     end)
 end;
@@ -3511,6 +3515,8 @@ function Library:CreateWindow(...)
     local Toggled = false;
     local Fading = false;
 
+    local IsMobile = InputService.TouchEnabled
+
     -- Bouton flottant pour mobile
     local FloatingButton = Library:Create('TextButton', {
         Size = UDim2.fromOffset(50, 50),
@@ -3520,7 +3526,7 @@ function Library:CreateWindow(...)
         Font = Library.Font,
         TextColor3 = Color3.new(1, 1, 1),
         TextSize = 18,
-        Visible = not Config.AutoShow,
+        Visible = true, -- Toujours visible pour mobile
         Parent = ScreenGui,
         ZIndex = 2000
     })
@@ -3544,7 +3550,10 @@ function Library:CreateWindow(...)
         if Toggled then
             -- A bit scuffed, but if we're going from not toggled -> toggled we want to show the frame immediately so that the fade is visible.
             Outer.Visible = true;
-            FloatingButton.Visible = false;
+            
+            if not IsMobile then
+                FloatingButton.Visible = false;
+            end
 
             task.spawn(function()
                 -- TODO: add cursor fade?
