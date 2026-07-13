@@ -2403,6 +2403,8 @@ do
                     Parent = Scrolling;
                 });
 
+            Library:Create('UICorner', { CornerRadius = UDim.new(0, 4), Parent = Button })
+
                 Library:AddToRegistry(Button, {
                     BackgroundColor3 = 'MainColor';
                     BorderColor3 = 'OutlineColor';
