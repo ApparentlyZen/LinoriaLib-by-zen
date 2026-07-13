@@ -471,6 +471,7 @@ do
             ZIndex = 15;
             Parent = ScreenGui,
         });
+        Library:Create('UICorner', { CornerRadius = UDim.new(0, 8), Parent = PickerFrameOuter });
 
         DisplayFrame:GetPropertyChangedSignal('AbsolutePosition'):Connect(function()
             PickerFrameOuter.Position = UDim2.fromOffset(DisplayFrame.AbsolutePosition.X, DisplayFrame.AbsolutePosition.Y + 18);
@@ -484,6 +485,7 @@ do
             ZIndex = 16;
             Parent = PickerFrameOuter;
         });
+        Library:Create('UICorner', { CornerRadius = UDim.new(0, 8), Parent = PickerFrameInner });
 
         local Highlight = Library:Create('Frame', {
             BackgroundColor3 = Library.AccentColor;
@@ -689,6 +691,7 @@ do
                 ZIndex = 15;
                 Parent = ContextMenu.Container;
             });
+            Library:Create('UICorner', { CornerRadius = UDim.new(0, 8), Parent = ContextMenu.Inner });
 
             Library:Create('UIListLayout', {
                 Name = 'Layout',
@@ -1043,6 +1046,7 @@ do
             ZIndex = 7;
             Parent = PickOuter;
         });
+        Library:Create('UICorner', { CornerRadius = UDim.new(0, 6), Parent = PickInner });
 
         Library:AddToRegistry(PickInner, {
             BackgroundColor3 = 'BackgroundColor';
@@ -1437,7 +1441,7 @@ do
                 Size = UDim2.new(1, -4, 0, 20);
                 ZIndex = 5;
             });
-            Library:Create('UICorner', { CornerRadius = UDim.new(0, 4), Parent = Outer })
+            Library:Create('UICorner', { CornerRadius = UDim.new(0, 8), Parent = Outer })
 
             local Inner = Library:Create('Frame', {
                 BackgroundColor3 = Library.MainColor;
@@ -1447,7 +1451,7 @@ do
                 ZIndex = 6;
                 Parent = Outer;
             });
-            Library:Create('UICorner', { CornerRadius = UDim.new(0, 4), Parent = Inner })
+            Library:Create('UICorner', { CornerRadius = UDim.new(0, 8), Parent = Inner })
 
             local Label = Library:CreateLabel({
                 Size = UDim2.new(1, 0, 1, 0);
@@ -1621,6 +1625,7 @@ do
             ZIndex = 6;
             Parent = DividerOuter;
         });
+        Library:Create('UICorner', { CornerRadius = UDim.new(0, 4), Parent = DividerInner });
 
         Library:AddToRegistry(DividerOuter, {
             BorderColor3 = 'Black';
@@ -1667,7 +1672,7 @@ do
             ZIndex = 5;
             Parent = Container;
         });
-        Library:Create('UICorner', { CornerRadius = UDim.new(0, 4), Parent = TextBoxOuter })
+        Library:Create('UICorner', { CornerRadius = UDim.new(0, 8), Parent = TextBoxOuter })
 
         local TextBoxInner = Library:Create('Frame', {
             BackgroundColor3 = Library.MainColor;
@@ -1677,7 +1682,7 @@ do
             ZIndex = 6;
             Parent = TextBoxOuter;
         });
-        Library:Create('UICorner', { CornerRadius = UDim.new(0, 4), Parent = TextBoxInner })
+        Library:Create('UICorner', { CornerRadius = UDim.new(0, 8), Parent = TextBoxInner })
 
         Library:AddToRegistry(TextBoxInner, {
             BackgroundColor3 = 'MainColor';
@@ -1844,7 +1849,7 @@ do
             ZIndex = 5;
             Parent = Container;
         });
-        Library:Create('UICorner', { CornerRadius = UDim.new(0, 2), Parent = ToggleOuter })
+        Library:Create('UICorner', { CornerRadius = UDim.new(0, 4), Parent = ToggleOuter })
 
         Library:AddToRegistry(ToggleOuter, {
             BorderColor3 = 'Black';
@@ -1858,7 +1863,7 @@ do
             ZIndex = 6;
             Parent = ToggleOuter;
         });
-        Library:Create('UICorner', { CornerRadius = UDim.new(0, 2), Parent = ToggleInner })
+        Library:Create('UICorner', { CornerRadius = UDim.new(0, 4), Parent = ToggleInner })
 
         Library:AddToRegistry(ToggleInner, {
             BackgroundColor3 = 'MainColor';
@@ -2217,7 +2222,7 @@ do
             ZIndex = 5;
             Parent = Container;
         });
-        Library:Create('UICorner', { CornerRadius = UDim.new(0, 4), Parent = DropdownOuter })
+        Library:Create('UICorner', { CornerRadius = UDim.new(0, 8), Parent = DropdownOuter })
 
         Library:AddToRegistry(DropdownOuter, {
             BorderColor3 = 'Black';
@@ -2231,7 +2236,7 @@ do
             ZIndex = 6;
             Parent = DropdownOuter;
         });
-        Library:Create('UICorner', { CornerRadius = UDim.new(0, 4), Parent = DropdownInner })
+        Library:Create('UICorner', { CornerRadius = UDim.new(0, 8), Parent = DropdownInner })
 
         Library:AddToRegistry(DropdownInner, {
             BackgroundColor3 = 'MainColor';
@@ -3093,6 +3098,7 @@ function Library:CreateWindow(...)
             ZIndex = 1;
             Parent = TabArea;
         });
+        Library:Create('UICorner', { CornerRadius = UDim.new(0, 8), Parent = TabButton })
 
         Library:AddToRegistry(TabButton, {
             BackgroundColor3 = 'BackgroundColor';
@@ -3208,11 +3214,12 @@ function Library:CreateWindow(...)
             local BoxOuter = Library:Create('Frame', {
                 BackgroundColor3 = Library.BackgroundColor;
                 BorderColor3 = Library.OutlineColor;
-                BorderMode = Enum.BorderMode.Inset;
+                BorderSizePixel = 0;
                 Size = UDim2.new(1, 0, 0, 0);
                 ZIndex = 2;
                 Parent = Info.Side == 1 and LeftSide or RightSide;
             });
+            Library:Create('UICorner', { CornerRadius = UDim.new(0, 10), Parent = BoxOuter })
 
             Library:AddToRegistry(BoxOuter, {
                 BackgroundColor3 = 'BackgroundColor';
@@ -3228,6 +3235,7 @@ function Library:CreateWindow(...)
                 ZIndex = 4;
                 Parent = BoxOuter;
             });
+            Library:Create('UICorner', { CornerRadius = UDim.new(0, 10), Parent = BoxInner })
 
             Library:AddToRegistry(BoxInner, {
                 BackgroundColor3 = 'BackgroundColor';
@@ -3308,11 +3316,12 @@ function Library:CreateWindow(...)
             local BoxOuter = Library:Create('Frame', {
                 BackgroundColor3 = Library.BackgroundColor;
                 BorderColor3 = Library.OutlineColor;
-                BorderMode = Enum.BorderMode.Inset;
+                BorderSizePixel = 0;
                 Size = UDim2.new(1, 0, 0, 0);
                 ZIndex = 2;
                 Parent = Info.Side == 1 and LeftSide or RightSide;
             });
+            Library:Create('UICorner', { CornerRadius = UDim.new(0, 10), Parent = BoxOuter })
 
             Library:AddToRegistry(BoxOuter, {
                 BackgroundColor3 = 'BackgroundColor';
@@ -3328,6 +3337,7 @@ function Library:CreateWindow(...)
                 ZIndex = 4;
                 Parent = BoxOuter;
             });
+            Library:Create('UICorner', { CornerRadius = UDim.new(0, 10), Parent = BoxInner })
 
             Library:AddToRegistry(BoxInner, {
                 BackgroundColor3 = 'BackgroundColor';
@@ -3370,6 +3380,7 @@ function Library:CreateWindow(...)
                     ZIndex = 6;
                     Parent = TabboxButtons;
                 });
+                Library:Create('UICorner', { CornerRadius = UDim.new(0, 6), Parent = Button });
 
                 Library:AddToRegistry(Button, {
                     BackgroundColor3 = 'MainColor';
@@ -3531,10 +3542,15 @@ function Library:CreateWindow(...)
 
     -- Bouton flottant pour mobile
     local FloatingButton = Library:Create('ImageButton', {
+    local FloatingButton = Library:Create('TextButton', {
         Size = UDim2.fromOffset(50, 50),
         Position = UDim2.new(0, 20, 0.5, -25),
         BackgroundColor3 = Library.AccentColor,
         Image = "",
+        Text = "UI",
+        Font = Library.Font,
+        TextColor3 = Color3.new(1, 1, 1),
+        TextSize = 18,
         Visible = true, -- Toujours visible pour mobile
         Parent = ScreenGui,
         ZIndex = 2000
@@ -3560,6 +3576,8 @@ function Library:CreateWindow(...)
         if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
             dragStartPos = input.Position
         end
+    FloatingButton.MouseButton1Click:Connect(function()
+        Library:Toggle()
     end)
 
     FloatingButton.InputEnded:Connect(function(input)
