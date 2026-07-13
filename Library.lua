@@ -1840,6 +1840,7 @@ do
             ZIndex = 5;
             Parent = Container;
         });
+        Library:Create('UICorner', { CornerRadius = UDim.new(0, 2), Parent = ToggleOuter })
 
         Library:AddToRegistry(ToggleOuter, {
             BorderColor3 = 'Black';
@@ -1853,6 +1854,7 @@ do
             ZIndex = 6;
             Parent = ToggleOuter;
         });
+        Library:Create('UICorner', { CornerRadius = UDim.new(0, 2), Parent = ToggleInner })
 
         Library:AddToRegistry(ToggleInner, {
             BackgroundColor3 = 'MainColor';
@@ -2209,6 +2211,7 @@ do
             ZIndex = 5;
             Parent = Container;
         });
+        Library:Create('UICorner', { CornerRadius = UDim.new(0, 4), Parent = DropdownOuter })
 
         Library:AddToRegistry(DropdownOuter, {
             BorderColor3 = 'Black';
@@ -2222,6 +2225,7 @@ do
             ZIndex = 6;
             Parent = DropdownOuter;
         });
+        Library:Create('UICorner', { CornerRadius = UDim.new(0, 4), Parent = DropdownInner })
 
         Library:AddToRegistry(DropdownInner, {
             BackgroundColor3 = 'MainColor';
@@ -2276,6 +2280,7 @@ do
             Visible = false;
             Parent = ScreenGui;
         });
+        Library:Create('UICorner', { CornerRadius = UDim.new(0, 6), Parent = ListOuter })
 
         local function RecalculateListPosition()
             ListOuter.Position = UDim2.fromOffset(DropdownOuter.AbsolutePosition.X, DropdownOuter.AbsolutePosition.Y + DropdownOuter.Size.Y.Offset + 1);
@@ -2299,6 +2304,7 @@ do
             ZIndex = 21;
             Parent = ListOuter;
         });
+        Library:Create('UICorner', { CornerRadius = UDim.new(0, 6), Parent = ListInner })
 
         Library:AddToRegistry(ListInner, {
             BackgroundColor3 = 'MainColor';
@@ -3518,14 +3524,11 @@ function Library:CreateWindow(...)
     local IsMobile = InputService.TouchEnabled
 
     -- Bouton flottant pour mobile
-    local FloatingButton = Library:Create('TextButton', {
+    local FloatingButton = Library:Create('ImageButton', {
         Size = UDim2.fromOffset(50, 50),
         Position = UDim2.new(0, 20, 0.5, -25),
         BackgroundColor3 = Library.AccentColor,
-        Text = "UI",
-        Font = Library.Font,
-        TextColor3 = Color3.new(1, 1, 1),
-        TextSize = 18,
+        Image = "rbxassetid://122765407222246",
         Visible = true, -- Toujours visible pour mobile
         Parent = ScreenGui,
         ZIndex = 2000
@@ -3533,8 +3536,25 @@ function Library:CreateWindow(...)
     Library:Create('UICorner', { CornerRadius = UDim.new(1, 0), Parent = FloatingButton })
     Library:MakeDraggable(FloatingButton)
     
-    FloatingButton.MouseButton1Click:Connect(function()
-        Library:Toggle()
+    -- Logique pour différencier le Drag du Click
+    local dragStartPos
+    FloatingButton.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            dragStartPos = input.Position
+        end
+    end)
+
+    FloatingButton.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            if dragStartPos then
+                local delta = (input.Position - dragStartPos).Magnitude
+                -- Si le bouton a bougé de moins de 5 pixels, on considère que c'est un clic
+                if delta < 5 then
+                    Library:Toggle()
+                end
+                dragStartPos = nil
+            end
+        end
     end)
 
     function Library:Toggle()
