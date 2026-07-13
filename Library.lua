@@ -1437,6 +1437,7 @@ do
                 Size = UDim2.new(1, -4, 0, 20);
                 ZIndex = 5;
             });
+            Library:Create('UICorner', { CornerRadius = UDim.new(0, 4), Parent = Outer })
 
             local Inner = Library:Create('Frame', {
                 BackgroundColor3 = Library.MainColor;
@@ -1446,6 +1447,7 @@ do
                 ZIndex = 6;
                 Parent = Outer;
             });
+            Library:Create('UICorner', { CornerRadius = UDim.new(0, 4), Parent = Inner })
 
             local Label = Library:CreateLabel({
                 Size = UDim2.new(1, 0, 1, 0);
@@ -1665,6 +1667,7 @@ do
             ZIndex = 5;
             Parent = Container;
         });
+        Library:Create('UICorner', { CornerRadius = UDim.new(0, 4), Parent = TextBoxOuter })
 
         local TextBoxInner = Library:Create('Frame', {
             BackgroundColor3 = Library.MainColor;
@@ -1674,6 +1677,7 @@ do
             ZIndex = 6;
             Parent = TextBoxOuter;
         });
+        Library:Create('UICorner', { CornerRadius = UDim.new(0, 4), Parent = TextBoxInner })
 
         Library:AddToRegistry(TextBoxInner, {
             BackgroundColor3 = 'MainColor';
@@ -1840,6 +1844,7 @@ do
             ZIndex = 5;
             Parent = Container;
         });
+        Library:Create('UICorner', { CornerRadius = UDim.new(0, 2), Parent = ToggleOuter })
 
         Library:AddToRegistry(ToggleOuter, {
             BorderColor3 = 'Black';
@@ -1853,6 +1858,7 @@ do
             ZIndex = 6;
             Parent = ToggleOuter;
         });
+        Library:Create('UICorner', { CornerRadius = UDim.new(0, 2), Parent = ToggleInner })
 
         Library:AddToRegistry(ToggleInner, {
             BackgroundColor3 = 'MainColor';
@@ -1997,6 +2003,7 @@ do
             ZIndex = 5;
             Parent = Container;
         });
+        Library:Create('UICorner', { CornerRadius = UDim.new(0, 4), Parent = SliderOuter })
 
         Library:AddToRegistry(SliderOuter, {
             BorderColor3 = 'Black';
@@ -2010,6 +2017,7 @@ do
             ZIndex = 6;
             Parent = SliderOuter;
         });
+        Library:Create('UICorner', { CornerRadius = UDim.new(0, 4), Parent = SliderInner })
 
         Library:AddToRegistry(SliderInner, {
             BackgroundColor3 = 'MainColor';
@@ -3523,10 +3531,12 @@ function Library:CreateWindow(...)
     local IsMobile = InputService.TouchEnabled
 
     -- Bouton flottant pour mobile
+    local FloatingButton = Library:Create('ImageButton', {
     local FloatingButton = Library:Create('TextButton', {
         Size = UDim2.fromOffset(50, 50),
         Position = UDim2.new(0, 20, 0.5, -25),
         BackgroundColor3 = Library.AccentColor,
+        Image = "",
         Text = "UI",
         Font = Library.Font,
         TextColor3 = Color3.new(1, 1, 1),
@@ -3537,9 +3547,40 @@ function Library:CreateWindow(...)
     })
     Library:Create('UICorner', { CornerRadius = UDim.new(1, 0), Parent = FloatingButton })
     Library:MakeDraggable(FloatingButton)
+
+    local imageUrl = "https://github.com/ApparentlyZen/image-namelessWare/blob/main/165abdd521328d77324b02ce8a77e090_1780162334922.webp?raw=true"
+    task.spawn(pcall, function()
+        if writefile and getcustomasset and game.HttpGet then
+            if not isfile("linoria_mobile_icon.webp") then
+                writefile("linoria_mobile_icon.webp", game:HttpGet(imageUrl))
+            end
+            FloatingButton.Image = getcustomasset("linoria_mobile_icon.webp")
+        else
+            FloatingButton.Image = imageUrl
+        end
+    end)
     
+    -- Logique pour différencier le Drag du Click
+    local dragStartPos
+    FloatingButton.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            dragStartPos = input.Position
+        end
     FloatingButton.MouseButton1Click:Connect(function()
         Library:Toggle()
+    end)
+
+    FloatingButton.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            if dragStartPos then
+                local delta = (input.Position - dragStartPos).Magnitude
+                -- Si le bouton a bougé de moins de 5 pixels, on considère que c'est un clic
+                if delta < 5 then
+                    Library:Toggle()
+                end
+                dragStartPos = nil
+            end
+        end
     end)
 
     function Library:Toggle()
