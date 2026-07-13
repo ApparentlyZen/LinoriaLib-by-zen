@@ -3096,6 +3096,8 @@ function Library:CreateWindow(...)
             Parent = TabArea;
         });
 
+        Library:Create('UICorner', { CornerRadius = UDim.new(0, 4), Parent = TabButton });
+
         Library:AddToRegistry(TabButton, {
             BackgroundColor3 = 'BackgroundColor';
             BorderColor3 = 'OutlineColor';
@@ -3372,6 +3374,8 @@ function Library:CreateWindow(...)
                     ZIndex = 6;
                     Parent = TabboxButtons;
                 });
+
+                Library:Create('UICorner', { CornerRadius = UDim.new(0, 4), Parent = Button });
 
                 Library:AddToRegistry(Button, {
                     BackgroundColor3 = 'MainColor';
