@@ -2947,8 +2947,8 @@ function Library:CreateWindow(...)
     if type(Config.TabPadding) ~= 'number' then Config.TabPadding = 0 end
     if type(Config.MenuFadeTime) ~= 'number' then Config.MenuFadeTime = 0.2 end
 
-    if typeof(Config.Position) ~= 'UDim2' then Config.Position = UDim2.fromOffset(175, 50) end
-    if typeof(Config.Size) ~= 'UDim2' then Config.Size = UDim2.fromOffset(550, 600) end
+    if typeof(Config.Position) ~= 'UDim2' then Config.Position = UDim2.fromScale(0.5, 0.5) end
+    if typeof(Config.Size) ~= 'UDim2' then Config.Size = UDim2.fromOffset(600, 350) end -- Plus horizontal pour mobile
 
     if Config.Center then
         Config.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -2960,7 +2960,7 @@ function Library:CreateWindow(...)
     };
 
     local Outer = Library:Create('Frame', {
-        AnchorPoint = Config.AnchorPoint,
+        AnchorPoint = Vector2.new(0.5, 0.5),
         BackgroundColor3 = Color3.new(0, 0, 0);
         BorderSizePixel = 0;
         Position = Config.Position,
@@ -2969,6 +2969,8 @@ function Library:CreateWindow(...)
         ZIndex = 1;
         Parent = ScreenGui;
     });
+    
+    Library:Create('UICorner', { CornerRadius = UDim.new(0, 12), Parent = Outer })
 
     Library:MakeDraggable(Outer, 25);
 
@@ -2981,6 +2983,8 @@ function Library:CreateWindow(...)
         ZIndex = 1;
         Parent = Outer;
     });
+    
+    Library:Create('UICorner', { CornerRadius = UDim.new(0, 12), Parent = Inner })
 
     Library:AddToRegistry(Inner, {
         BackgroundColor3 = 'MainColor';
@@ -3507,11 +3511,31 @@ function Library:CreateWindow(...)
     local Toggled = false;
     local Fading = false;
 
+    -- Bouton flottant pour mobile
+    local FloatingButton = Library:Create('TextButton', {
+        Size = UDim2.fromOffset(50, 50),
+        Position = UDim2.new(0, 20, 0.5, -25),
+        BackgroundColor3 = Library.AccentColor,
+        Text = "UI",
+        Font = Library.Font,
+        TextColor3 = Color3.new(1, 1, 1),
+        TextSize = 18,
+        Visible = not Config.AutoShow,
+        Parent = ScreenGui,
+        ZIndex = 2000
+    })
+    Library:Create('UICorner', { CornerRadius = UDim.new(1, 0), Parent = FloatingButton })
+    Library:MakeDraggable(FloatingButton)
+    
+    FloatingButton.MouseButton1Click:Connect(function()
+        Library:Toggle()
+    end)
+
     function Library:Toggle()
         if Fading then
             return;
         end;
-
+        
         local FadeTime = Config.MenuFadeTime;
         Fading = true;
         Toggled = (not Toggled);
@@ -3520,6 +3544,7 @@ function Library:CreateWindow(...)
         if Toggled then
             -- A bit scuffed, but if we're going from not toggled -> toggled we want to show the frame immediately so that the fade is visible.
             Outer.Visible = true;
+            FloatingButton.Visible = false;
 
             task.spawn(function()
                 -- TODO: add cursor fade?
@@ -3559,6 +3584,8 @@ function Library:CreateWindow(...)
                 Cursor:Remove();
                 CursorOutline:Remove();
             end);
+        else
+            FloatingButton.Visible = true;
         end;
 
         for _, Desc in next, Outer:GetDescendants() do
