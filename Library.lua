@@ -3093,7 +3093,6 @@ function Library:CreateWindow(...)
             ZIndex = 1;
             Parent = TabArea;
         });
-        Library:Create('UICorner', { CornerRadius = UDim.new(0, 4), Parent = TabButton })
 
         Library:AddToRegistry(TabButton, {
             BackgroundColor3 = 'BackgroundColor';
@@ -3532,15 +3531,10 @@ function Library:CreateWindow(...)
 
     -- Bouton flottant pour mobile
     local FloatingButton = Library:Create('ImageButton', {
-    local FloatingButton = Library:Create('TextButton', {
         Size = UDim2.fromOffset(50, 50),
         Position = UDim2.new(0, 20, 0.5, -25),
         BackgroundColor3 = Library.AccentColor,
         Image = "",
-        Text = "UI",
-        Font = Library.Font,
-        TextColor3 = Color3.new(1, 1, 1),
-        TextSize = 18,
         Visible = true, -- Toujours visible pour mobile
         Parent = ScreenGui,
         ZIndex = 2000
@@ -3566,8 +3560,6 @@ function Library:CreateWindow(...)
         if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
             dragStartPos = input.Position
         end
-    FloatingButton.MouseButton1Click:Connect(function()
-        Library:Toggle()
     end)
 
     FloatingButton.InputEnded:Connect(function(input)
