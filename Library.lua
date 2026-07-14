@@ -3748,30 +3748,75 @@ function Library:CreateWindow(...)
     if Config.AutoShow then 
         if Config.AnimateIntro then
             task.spawn(function()
-                local SplashLabel = Library:CreateLabel({
-                    Size = UDim2.fromScale(1, 1),
-                    Text = "Welcome to namelessWare",
-                    TextSize = 35,
-                    TextTransparency = 1,
-                    ZIndex = 10000,
+                -- Création du petit carré central (Card)
+                local InjectFrame = Library:Create('Frame', {
+                    Size = UDim2.fromOffset(280, 100),
+                    Position = UDim2.fromScale(0.5, 0.5),
+                    AnchorPoint = Vector2.new(0.5, 0.5),
+                    BackgroundColor3 = Library.MainColor,
+                    BackgroundTransparency = 1,
+                    BorderSizePixel = 0,
                     Parent = ScreenGui,
+                    ZIndex = 10001
                 })
                 
-                -- Animation d'entrée
-                local FadeIn = TweenService:Create(SplashLabel, TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { TextTransparency = 0 })
-                FadeIn:Play()
-                FadeIn.Completed:Wait()
+                Library:Create('UICorner', { CornerRadius = UDim.new(0, 12), Parent = InjectFrame })
+                local Stroke = Library:Create('UIStroke', { Color = Library.AccentColor, Thickness = 2, Transparency = 1, Parent = InjectFrame })
+
+                local Title = Library:CreateLabel({
+                    Size = UDim2.new(1, 0, 0, 40),
+                    Position = UDim2.new(0, 0, 0.15, 0),
+                    Text = "Injecting namelessWare...",
+                    TextSize = 18,
+                    TextTransparency = 1,
+                    Parent = InjectFrame
+                })
+
+                -- Conteneur de la barre de progression
+                local BarBack = Library:Create('Frame', {
+                    Size = UDim2.new(0.8, 0, 0, 6),
+                    Position = UDim2.new(0.5, 0, 0.7, 0),
+                    AnchorPoint = Vector2.new(0.5, 0.5),
+                    BackgroundColor3 = Library.BackgroundColor,
+                    BackgroundTransparency = 1,
+                    Parent = InjectFrame
+                })
+                Library:Create('UICorner', { CornerRadius = UDim.new(1, 0), Parent = BarBack })
+
+                local BarFill = Library:Create('Frame', {
+                    Size = UDim2.new(0, 0, 1, 0),
+                    BackgroundColor3 = Library.AccentColor,
+                    BackgroundTransparency = 1,
+                    Parent = BarBack
+                })
+                Library:Create('UICorner', { CornerRadius = UDim.new(1, 0), Parent = BarFill })
+
+                -- Séquence d'animation : Apparition
+                TweenService:Create(InjectFrame, TweenInfo.new(0.5), { BackgroundTransparency = 0.15 }):Play()
+                TweenService:Create(Stroke, TweenInfo.new(0.5), { Transparency = 0.5 }):Play()
+                TweenService:Create(Title, TweenInfo.new(0.5), { TextTransparency = 0 }):Play()
+                TweenService:Create(BarBack, TweenInfo.new(0.5), { BackgroundTransparency = 0 }):Play()
+                TweenService:Create(BarFill, TweenInfo.new(0.5), { BackgroundTransparency = 0 }):Play()
                 
-                task.wait(1.5)
+                task.wait(0.6)
+
+                -- Animation de la barre (Injection)
+                local Progress = TweenService:Create(BarFill, TweenInfo.new(2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), { Size = UDim2.fromScale(1, 1) })
+                Progress:Play()
+                Progress.Completed:Wait()
                 
-                -- Animation de sortie
-                local FadeOut = TweenService:Create(SplashLabel, TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.In), { TextTransparency = 1 })
-                FadeOut:Play()
-                FadeOut.Completed:Wait()
+                task.wait(0.4)
+
+                -- Disparition
+                TweenService:Create(InjectFrame, TweenInfo.new(0.5), { BackgroundTransparency = 1 }):Play()
+                TweenService:Create(Stroke, TweenInfo.new(0.5), { Transparency = 1 }):Play()
+                TweenService:Create(Title, TweenInfo.new(0.5), { TextTransparency = 1 }):Play()
+                TweenService:Create(BarBack, TweenInfo.new(0.5), { BackgroundTransparency = 1 }):Play()
+                local LastTween = TweenService:Create(BarFill, TweenInfo.new(0.5), { BackgroundTransparency = 1 })
+                LastTween:Play()
+                LastTween.Completed:Wait()
                 
-                SplashLabel:Destroy()
-                
-                -- Ouverture du menu après l'animation
+                InjectFrame:Destroy()
                 Library:Toggle()
             end)
         else
