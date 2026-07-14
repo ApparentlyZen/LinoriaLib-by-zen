@@ -3087,7 +3087,8 @@ function Library:CreateWindow(...)
     local WindowLabel = Library:CreateLabel({
         Position = UDim2.new(0, 7 + 20 + 5, 0, 0); -- Après le logo + 5px de padding
         Size = UDim2.new(0, 0, 1, 0); -- Prend toute la hauteur de TitleBarFrame
-        Text = Config.Title or '';
+        RichText = true;
+        Text = (Config.Title == 'NamelessWare') and '<font color="rgb(160, 80, 255)">Nameless</font><font color="rgb(255, 255, 255)">Ware</font>' or (Config.Title or '');
         TextXAlignment = Enum.TextXAlignment.Left;
         ZIndex = 6;
         Parent = TitleBarFrame;
@@ -3214,7 +3215,7 @@ function Library:CreateWindow(...)
     });
 
     function Window:SetWindowTitle(Title)
-        WindowLabel.Text = Title;
+        WindowLabel.Text = (Title == 'NamelessWare') and '<font color="rgb(160, 80, 255)">Nameless</font><font color="rgb(255, 255, 255)">Ware</font>' or Title;
     end;
 
     function Window:AddTab(Name, Category)
