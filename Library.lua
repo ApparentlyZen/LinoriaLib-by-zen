@@ -396,6 +396,11 @@ function Library:Unload()
         Library.OnUnload()
     end
 
+    if Library.Blur then
+        Library.Blur:Destroy();
+        Library.Blur = nil;
+    end;
+
     ScreenGui:Destroy()
 end
 
@@ -3682,7 +3687,9 @@ function Library:CreateWindow(...)
         end;
         
         -- Désactiver le flou après l'animation de fermeture
-        task.delay(FadeTime, function() if not Toggled and Library.Blur then Library.Blur.Enabled = false end end)
+        if not Toggled and Library.Blur then
+            task.delay(FadeTime, function() if not Toggled and Library.Blur then Library.Blur.Enabled = false end end)
+        end
 
         -- Animation de l'icône flottante (petite pression)
         TweenService:Create(FloatingButton, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, true), { Size = UDim2.fromOffset(45, 45) }):Play()
