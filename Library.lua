@@ -3123,23 +3123,9 @@ function Library:CreateWindow(...)
     end
 
     function Window:AddCategory(Name, Icon)
-        local IsEmoji = false
-        local ImageId = ""
-
-        if type(Icon) == "number" then
-            ImageId = "rbxassetid://" .. Icon
-        elseif type(Icon) == "string" then
-            -- Si c'est un lien, un assetid existant ou une rbxasset
-            if Icon:find("rbxassetid://") or Icon:find("http://") or Icon:find("https://") or Icon:find("rbxasset://") then
-                ImageId = Icon
-            elseif tonumber(Icon) then
-                -- Si c'est une chaîne de chiffres, on force le rbxassetid
-                ImageId = "rbxassetid://" .. Icon
-            else
-                -- Sinon, on considère que c'est du texte (Emoji ou symbole)
-                IsEmoji = true
-            end
-        end
+        -- Détection automatique : Nombre (ID), String (Lien/ID) ou Emoji
+        local IsEmoji = type(Icon) == "string" and #Icon <= 4 -- Un emoji est court
+        local ImageId = type(Icon) == "number" and "rbxassetid://" .. Icon or Icon
 
         local CatButton = Library:Create(IsEmoji and 'TextButton' or 'ImageButton', {
             Size = UDim2.fromOffset(28, 28),
