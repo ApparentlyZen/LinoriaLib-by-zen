@@ -30,10 +30,10 @@ local Library = {
     HudRegistry = {};
 
     FontColor = Color3.fromRGB(255, 255, 255);
-    MainColor = Color3.fromRGB(28, 28, 28);
-    BackgroundColor = Color3.fromRGB(20, 20, 20);
-    AccentColor = Color3.fromRGB(0, 85, 255);
-    OutlineColor = Color3.fromRGB(50, 50, 50);
+    MainColor = Color3.fromRGB(15, 12, 22); -- Violet très sombre
+    BackgroundColor = Color3.fromRGB(10, 8, 15); -- Fond plus profond
+    AccentColor = Color3.fromRGB(160, 80, 255); -- Violet électrique
+    OutlineColor = Color3.fromRGB(45, 40, 60);
     RiskColor = Color3.fromRGB(255, 50, 50),
 
     Black = Color3.new(0, 0, 0);
@@ -3122,7 +3122,7 @@ function Library:CreateWindow(...)
             BackgroundTransparency = 1,
             Image = Icon,
             ImageColor3 = Color3.fromRGB(150, 150, 150),
-            ZIndex = 2,
+            ZIndex = 10,
             Parent = Sidebar
         })
 
