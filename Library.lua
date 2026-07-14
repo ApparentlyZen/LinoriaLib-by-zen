@@ -3069,7 +3069,7 @@ function Library:CreateWindow(...)
     local TitleBarFrame = Library:Create('Frame', {
         BackgroundTransparency = 1,
         Position = UDim2.new(0, 0, 0, 0),
-        Size = UDim2.new(1, 0, 0, 40), -- Hauteur de la barre de titre
+        Size = UDim2.new(1, 0, 0, 20), -- Hauteur de la barre de titre
         ZIndex = 5, -- Augmenté pour passer devant
         Parent = Inner,
     })
