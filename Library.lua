@@ -2992,7 +2992,7 @@ function Library:CreateWindow(...)
 
     -- Utilise un Asset ID Roblox fiable pour le logo principal
     -- (Ex: 10747373176 est l'icône "Swords" - tu peux la changer si tu as un autre ID préféré)
-    local logoAssetId = Library:NormalizeAssetId(10747373176) 
+    local logoAssetId = Library:NormalizeAssetId(122765407222246) 
 
     -- Initialisation du flou
     if not Library.Blur then
