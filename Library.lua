@@ -2965,6 +2965,7 @@ function Library:CreateWindow(...)
     if type(Config.Title) ~= 'string' then Config.Title = 'No title' end
     if type(Config.TabPadding) ~= 'number' then Config.TabPadding = 0 end
     if type(Config.MenuFadeTime) ~= 'number' then Config.MenuFadeTime = 0.2 end
+    if Config.AnimateIntro == nil then Config.AnimateIntro = true end
 
     if typeof(Config.Position) ~= 'UDim2' then Config.Position = UDim2.fromScale(0.5, 0.5) end
     if typeof(Config.Size) ~= 'UDim2' then Config.Size = UDim2.fromOffset(600, 350) end -- Plus horizontal pour mobile
@@ -2999,6 +3000,8 @@ function Library:CreateWindow(...)
     
     Library:Create('UICorner', { CornerRadius = UDim.new(0, 12), Parent = Outer })
     
+    local MainScale = Library:Create('UIScale', { Parent = Outer, Scale = 1 })
+
     -- Ajout d'une lueur (Glow) autour du menu
     Library:Create('UIStroke', {
         Color = Library.AccentColor,
@@ -3599,19 +3602,23 @@ function Library:CreateWindow(...)
         end
     end)
 
-    function Library:Toggle()
+    function Library:Toggle(Instant)
         if Fading then
             return;
         end;
         
-        local FadeTime = Config.MenuFadeTime;
+        local FadeTime = Instant and 0 or Config.MenuFadeTime;
         Fading = true;
         Toggled = (not Toggled);
         ModalElement.Modal = Toggled;
 
         -- Animation du Flou
         if Library.Blur then
-            Library.Blur.Enabled = true;
+            if not Instant then
+                Library.Blur.Enabled = true;
+            else
+                Library.Blur.Enabled = Toggled
+            end
             TweenService:Create(Library.Blur, TweenInfo.new(FadeTime), { Size = Toggled and 15 or 0 }):Play();
         end
 
@@ -3622,6 +3629,12 @@ function Library:CreateWindow(...)
             if not IsMobile then
                 FloatingButton.Visible = false;
             end
+            
+            if not Instant then
+                MainScale.Scale = 0.8
+                TweenService:Create(MainScale, TweenInfo.new(FadeTime, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { Scale = 1 }):Play()
+            end
+            Outer.BackgroundTransparency = 0
 
             task.spawn(function()
                 -- TODO: add cursor fade?
@@ -3662,11 +3675,17 @@ function Library:CreateWindow(...)
                 CursorOutline:Remove();
             end);
         else
+            if not Instant then
+                TweenService:Create(MainScale, TweenInfo.new(FadeTime, Enum.EasingStyle.Back, Enum.EasingDirection.In), { Scale = 0.8 }):Play()
+            end
             FloatingButton.Visible = true;
         end;
         
         -- Désactiver le flou après l'animation de fermeture
         task.delay(FadeTime, function() if not Toggled and Library.Blur then Library.Blur.Enabled = false end end)
+
+        -- Animation de l'icône flottante (petite pression)
+        TweenService:Create(FloatingButton, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, true), { Size = UDim2.fromOffset(45, 45) }):Play()
 
         for _, Desc in next, Outer:GetDescendants() do
             local Properties = {};
@@ -3719,7 +3738,13 @@ function Library:CreateWindow(...)
         end
     end))
 
-    if Config.AutoShow then task.spawn(Library.Toggle) end
+    if Config.AutoShow then 
+        if Config.AnimateIntro then
+            task.spawn(Library.Toggle) 
+        else
+            Library:Toggle(true)
+        end
+    end
 
     Window.Holder = Outer;
 
