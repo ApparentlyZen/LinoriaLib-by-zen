@@ -42,6 +42,7 @@ local Library = {
     OpenedFrames = {};
     DependencyBoxes = {};
 
+    Blur = nil;
     Signals = {};
     ScreenGui = ScreenGui;
 };
@@ -2968,6 +2969,14 @@ function Library:CreateWindow(...)
     if typeof(Config.Position) ~= 'UDim2' then Config.Position = UDim2.fromScale(0.5, 0.5) end
     if typeof(Config.Size) ~= 'UDim2' then Config.Size = UDim2.fromOffset(600, 350) end -- Plus horizontal pour mobile
 
+    -- Initialisation du flou
+    if not Library.Blur then
+        Library.Blur = Instance.new('BlurEffect');
+        Library.Blur.Size = 0;
+        Library.Blur.Enabled = false;
+        Library.Blur.Parent = game:GetService('Lighting');
+    end
+
     if Config.Center then
         Config.AnchorPoint = Vector2.new(0.5, 0.5)
         Config.Position = UDim2.fromScale(0.5, 0.5)
@@ -2979,7 +2988,7 @@ function Library:CreateWindow(...)
 
     local Outer = Library:Create('Frame', {
         AnchorPoint = Vector2.new(0.5, 0.5),
-        BackgroundColor3 = Color3.new(0, 0, 0);
+        BackgroundColor3 = Color3.new(0, 0, 0); -- Bordure noire
         BorderSizePixel = 0;
         Position = Config.Position,
         Size = Config.Size,
@@ -2989,6 +2998,14 @@ function Library:CreateWindow(...)
     });
     
     Library:Create('UICorner', { CornerRadius = UDim.new(0, 12), Parent = Outer })
+    
+    -- Ajout d'une lueur (Glow) autour du menu
+    Library:Create('UIStroke', {
+        Color = Library.AccentColor,
+        Thickness = 2,
+        Transparency = 0.5,
+        Parent = Outer
+    })
 
     Library:MakeDraggable(Outer, 25);
 
@@ -2996,6 +3013,7 @@ function Library:CreateWindow(...)
         BackgroundColor3 = Library.MainColor;
         BorderColor3 = Library.AccentColor;
         BorderMode = Enum.BorderMode.Inset;
+        BackgroundTransparency = 0.15; -- Légère transparence
         Position = UDim2.new(0, 1, 0, 1);
         Size = UDim2.new(1, -2, 1, -2);
         ZIndex = 1;
@@ -3591,6 +3609,12 @@ function Library:CreateWindow(...)
         Toggled = (not Toggled);
         ModalElement.Modal = Toggled;
 
+        -- Animation du Flou
+        if Library.Blur then
+            Library.Blur.Enabled = true;
+            TweenService:Create(Library.Blur, TweenInfo.new(FadeTime), { Size = Toggled and 15 or 0 }):Play();
+        end
+
         if Toggled then
             -- A bit scuffed, but if we're going from not toggled -> toggled we want to show the frame immediately so that the fade is visible.
             Outer.Visible = true;
@@ -3640,6 +3664,9 @@ function Library:CreateWindow(...)
         else
             FloatingButton.Visible = true;
         end;
+        
+        -- Désactiver le flou après l'animation de fermeture
+        task.delay(FadeTime, function() if not Toggled and Library.Blur then Library.Blur.Enabled = false end end)
 
         for _, Desc in next, Outer:GetDescendants() do
             local Properties = {};
