@@ -3050,7 +3050,7 @@ function Library:CreateWindow(...)
     -- Logo à côté du titre
     local WindowLogo = Library:Create('ImageLabel', {
         Size = UDim2.fromOffset(20, 20),
-        Position = UDim2.new(0, 7, 0.5, -10), -- Centré verticalement, 7px du bord gauche
+        Position = UDim2.new(0, 7, 0, 3), -- Aligné en haut (Y=3) pour être à côté du titre
         Image = logoAssetId, -- Utilise l'Asset ID ou l'URL chargée
         BackgroundTransparency = 1,
         ZIndex = 1,
