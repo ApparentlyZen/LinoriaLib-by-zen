@@ -2975,6 +2975,18 @@ function Library:CreateWindow(...)
     if typeof(Config.Position) ~= 'UDim2' then Config.Position = UDim2.fromScale(0.5, 0.5) end
     if typeof(Config.Size) ~= 'UDim2' then Config.Size = UDim2.fromOffset(600, 350) end -- Plus horizontal pour mobile
 
+    -- Définition et chargement du logo une seule fois
+    local logoUrl = "https://github.com/ApparentlyZen/image-namelessWare/blob/main/165abdd521328d77324b02ce8a77e090_1780162334922.webp?raw=true"
+    local logoAssetId = logoUrl -- Par défaut, utilise l'URL directe
+
+    task.spawn(pcall, function()
+        if writefile and getcustomasset and game.HttpGet then
+            local fileName = "nameless_logo.webp"
+            if not isfile(fileName) then writefile(fileName, game:HttpGet(logoUrl)) end
+            logoAssetId = getcustomasset(fileName)
+        end
+    end)
+
     -- Initialisation du flou
     if not Library.Blur then
         Library.Blur = Instance.new('BlurEffect');
@@ -3035,8 +3047,18 @@ function Library:CreateWindow(...)
         BorderColor3 = 'AccentColor';
     });
 
+    -- Logo à côté du titre
+    local WindowLogo = Library:Create('ImageLabel', {
+        Size = UDim2.fromOffset(20, 20),
+        Position = UDim2.new(0, 7, 0.5, -10), -- Centré verticalement, 7px du bord gauche
+        Image = logoAssetId, -- Utilise l'Asset ID ou l'URL chargée
+        BackgroundTransparency = 1,
+        ZIndex = 1,
+        Parent = Inner,
+    })
+
     local WindowLabel = Library:CreateLabel({
-        Position = UDim2.new(0, 7, 0, 0);
+        Position = UDim2.new(0, 7 + 20 + 5, 0, 0); -- Après le logo + 5px de padding
         Size = UDim2.new(0, 0, 0, 25);
         Text = Config.Title or '';
         TextXAlignment = Enum.TextXAlignment.Left;
@@ -3639,15 +3661,15 @@ function Library:CreateWindow(...)
     Library:Create('UIStroke', { Color = Library.AccentColor, Thickness = 2, Parent = FloatingButton })
     Library:MakeDraggable(FloatingButton)
 
-    local imageUrl = "https://github.com/ApparentlyZen/image-namelessWare/blob/main/165abdd521328d77324b02ce8a77e090_1780162334922.webp?raw=true"
+    -- Utilise le même logoAssetId défini plus haut
     task.spawn(pcall, function()
         if writefile and getcustomasset and game.HttpGet then
             if not isfile("linoria_mobile_icon.webp") then
-                writefile("linoria_mobile_icon.webp", game:HttpGet(imageUrl))
+                writefile("linoria_mobile_icon.webp", game:HttpGet(logoUrl)) -- Utilise logoUrl pour le téléchargement
             end
             FloatingButton.Image = getcustomasset("linoria_mobile_icon.webp")
         else
-            FloatingButton.Image = imageUrl
+            FloatingButton.Image = logoUrl -- Utilise logoUrl si getcustomasset n'est pas dispo
         end
     end)
     
