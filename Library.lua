@@ -3134,7 +3134,7 @@ function Library:CreateWindow(...)
     Library:Create('UICorner', { CornerRadius = UDim.new(0, 8), Parent = Sidebar })
 
     local SidebarLayout = Library:Create('UIListLayout', {
-        Padding = UDim.new(0, 10);
+        Padding = UDim.new(0, 40);
         FillDirection = Enum.FillDirection.Vertical;
         HorizontalAlignment = Enum.HorizontalAlignment.Center;
         VerticalAlignment = Enum.VerticalAlignment.Top;
