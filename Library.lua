@@ -3825,28 +3825,27 @@ function Library:CreateWindow(...)
                     ZIndex = 10001
                 })
                 
-                Library:Create('UICorner', { CornerRadius = UDim.new(0, 4), Parent = InjectFrame })
-                local Stroke = Library:Create('UIStroke', { Color = Library.AccentColor, Thickness = 2, Transparency = 1, Parent = InjectFrame })
+                local Stroke = Library:Create('UIStroke', { Color = Library.AccentColor, Thickness = 3, Transparency = 1, Parent = InjectFrame })
 
                 local Title = Library:CreateLabel({
                     Size = UDim2.new(1, 0, 0, 40),
                     Position = UDim2.new(0, 0, 0.15, 0),
                     Text = "Initializing...",
-                    TextSize = 18,
+                    TextSize = 22,
                     TextTransparency = 1,
                     Parent = InjectFrame
                 })
 
                 -- Conteneur de la barre de progression
                 local BarBack = Library:Create('Frame', {
-                    Size = UDim2.new(0.8, 0, 0, 6),
+                    Size = UDim2.new(0.8, 0, 0, 12),
                     Position = UDim2.new(0.5, 0, 0.7, 0),
                     AnchorPoint = Vector2.new(0.5, 0.5),
                     BackgroundColor3 = Library.BackgroundColor,
                     BackgroundTransparency = 1,
                     Parent = InjectFrame
                 })
-                Library:Create('UICorner', { CornerRadius = UDim.new(1, 0), Parent = BarBack })
+                Library:Create('UIStroke', { Color = Library.OutlineColor, Thickness = 1, Parent = BarBack })
 
                 local BarFill = Library:Create('Frame', {
                     Size = UDim2.new(0, 0, 1, 0),
@@ -3854,7 +3853,6 @@ function Library:CreateWindow(...)
                     BackgroundTransparency = 1,
                     Parent = BarBack
                 })
-                Library:Create('UICorner', { CornerRadius = UDim.new(1, 0), Parent = BarFill })
 
                 -- Séquence d'animation : Apparition
                 local IntroFade = TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
