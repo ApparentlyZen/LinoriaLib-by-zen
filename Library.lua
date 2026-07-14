@@ -2990,8 +2990,20 @@ function Library:CreateWindow(...)
     if typeof(Config.Position) ~= 'UDim2' then Config.Position = UDim2.fromScale(0.5, 0.5) end
     if typeof(Config.Size) ~= 'UDim2' then Config.Size = UDim2.fromOffset(600, 350) end -- Plus horizontal pour mobile
 
-    -- Utilise ton ID spécifique comme logo par défaut
-    local logoAssetId = Library:NormalizeAssetId(Config.Logo or 122765407222246) 
+    -- On reprend ton image GitHub qui fonctionne sur le bouton
+    local logoUrl = "https://github.com/ApparentlyZen/image-namelessWare/blob/main/165abdd521328d77324b02ce8a77e090_1780162334922.webp?raw=true"
+    local logoAssetId = logoUrl
+
+    -- On tente de la télécharger proprement pour plus de rapidité (comme sur le bouton)
+    task.spawn(pcall, function()
+        if writefile and getcustomasset and game.HttpGet then
+            local fileName = "nameless_logo_v2.webp"
+            if not isfile(fileName) then
+                writefile(fileName, game:HttpGet(logoUrl))
+            end
+            logoAssetId = getcustomasset(fileName)
+        end
+    end)
 
     -- Initialisation du flou
     if not Library.Blur then
@@ -3058,17 +3070,17 @@ function Library:CreateWindow(...)
         BackgroundTransparency = 1,
         Position = UDim2.new(0, 0, 0, 0),
         Size = UDim2.new(1, 0, 0, 25), -- Hauteur de la barre de titre
-        ZIndex = 1,
+        ZIndex = 5, -- Augmenté pour passer devant
         Parent = Inner,
     })
 
     -- Logo à côté du titre
     local WindowLogo = Library:Create('ImageLabel', {
         Size = UDim2.fromOffset(20, 20),
-        Position = UDim2.new(0, 7, 0.5, -10), -- Centré verticalement dans TitleBarFrame
+        Position = UDim2.new(0, 7, 0.5, -10),
         Image = logoAssetId, -- Utilise l'Asset ID ou l'URL chargée
         BackgroundTransparency = 1,
-        ZIndex = 1,
+        ZIndex = 6, -- Plus haut que la barre de titre
         Parent = TitleBarFrame,
     })
 
@@ -3077,7 +3089,7 @@ function Library:CreateWindow(...)
         Size = UDim2.new(0, 0, 1, 0); -- Prend toute la hauteur de TitleBarFrame
         Text = Config.Title or '';
         TextXAlignment = Enum.TextXAlignment.Left;
-        ZIndex = 1;
+        ZIndex = 6;
         Parent = TitleBarFrame;
     });
 
