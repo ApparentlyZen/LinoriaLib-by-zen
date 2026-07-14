@@ -113,6 +113,21 @@ function Library:SafeCallback(f, ...)
     end;
 end;
 
+-- Helper function to normalize asset IDs/URLs
+function Library:NormalizeAssetId(id)
+    if type(id) == "number" then
+        return "rbxassetid://" .. id
+    elseif type(id) == "string" then
+        -- If it's already an rbxassetid, http, or https URL, use it directly
+        if id:find("rbxassetid://") or id:find("http://") or id:find("https://") then
+            return id
+        end
+        -- If it's a raw asset ID string that needs prefixing
+        if tonumber(id) then return "rbxassetid://" .. id end
+    end
+    return id or "" -- Return as is, or empty string if nil
+end
+
 function Library:AttemptSave()
     if Library.SaveManager then
         Library.SaveManager:Save();
@@ -2975,17 +2990,9 @@ function Library:CreateWindow(...)
     if typeof(Config.Position) ~= 'UDim2' then Config.Position = UDim2.fromScale(0.5, 0.5) end
     if typeof(Config.Size) ~= 'UDim2' then Config.Size = UDim2.fromOffset(600, 350) end -- Plus horizontal pour mobile
 
-    -- Définition et chargement du logo une seule fois
-    local logoUrl = "https://github.com/ApparentlyZen/image-namelessWare/blob/main/165abdd521328d77324b02ce8a77e090_1780162334922.webp?raw=true"
-    local logoAssetId = logoUrl -- Par défaut, utilise l'URL directe
-
-    task.spawn(pcall, function()
-        if writefile and getcustomasset and game.HttpGet then
-            local fileName = "nameless_logo.webp"
-            if not isfile(fileName) then writefile(fileName, game:HttpGet(logoUrl)) end
-            logoAssetId = getcustomasset(fileName)
-        end
-    end)
+    -- Utilise un Asset ID Roblox fiable pour le logo principal
+    -- (Ex: 10747373176 est l'icône "Swords" - tu peux la changer si tu as un autre ID préféré)
+    local logoAssetId = Library:NormalizeAssetId(10747373176) 
 
     -- Initialisation du flou
     if not Library.Blur then
@@ -3047,25 +3054,35 @@ function Library:CreateWindow(...)
         BorderColor3 = 'AccentColor';
     });
 
-    -- Logo à côté du titre
-    local WindowLogo = Library:Create('ImageLabel', {
-        Size = UDim2.fromOffset(20, 20),
-        Position = UDim2.new(0, 7, 0, 3), -- Aligné en haut (Y=3) pour être à côté du titre
-        Image = logoAssetId, -- Utilise l'Asset ID ou l'URL chargée
+    -- Cadre pour le titre et le logo
+    local TitleBarFrame = Library:Create('Frame', {
         BackgroundTransparency = 1,
+        Position = UDim2.new(0, 0, 0, 0),
+        Size = UDim2.new(1, 0, 0, 25), -- Hauteur de la barre de titre
         ZIndex = 1,
         Parent = Inner,
     })
 
+    -- Logo à côté du titre
+    local WindowLogo = Library:Create('ImageLabel', {
+        Size = UDim2.fromOffset(20, 20),
+        Position = UDim2.new(0, 7, 0.5, -10), -- Centré verticalement dans TitleBarFrame
+        Image = logoAssetId, -- Utilise l'Asset ID ou l'URL chargée
+        BackgroundTransparency = 1,
+        ZIndex = 1,
+        Parent = TitleBarFrame,
+    })
+
     local WindowLabel = Library:CreateLabel({
         Position = UDim2.new(0, 7 + 20 + 5, 0, 0); -- Après le logo + 5px de padding
-        Size = UDim2.new(0, 0, 0, 25);
+        Size = UDim2.new(0, 0, 1, 0); -- Prend toute la hauteur de TitleBarFrame
         Text = Config.Title or '';
         TextXAlignment = Enum.TextXAlignment.Left;
         ZIndex = 1;
-        Parent = Inner;
+        Parent = TitleBarFrame;
     });
 
+    -- Ajuster la position de MainSectionOuter et Sidebar pour laisser de la place à la TitleBarFrame
     local MainSectionOuter = Library:Create('Frame', {
         BackgroundColor3 = Library.BackgroundColor;
         BorderColor3 = Library.OutlineColor;
@@ -3097,7 +3114,7 @@ function Library:CreateWindow(...)
     local Sidebar = Library:Create('Frame', {
         BackgroundColor3 = Library.BackgroundColor;
         BackgroundTransparency = 0.5;
-        Position = UDim2.new(0, 4, 0, 25);
+        Position = UDim2.new(0, 4, 0, 25); -- Commence après la TitleBarFrame
         Size = UDim2.new(0, 44, 1, -33);
         ZIndex = 1;
         Parent = Inner;
@@ -3142,7 +3159,7 @@ function Library:CreateWindow(...)
         local CatButton = Library:Create('ImageButton', {
             Size = UDim2.fromOffset(28, 28),
             BackgroundTransparency = 1,
-            Image = Icon,
+            Image = Library:NormalizeAssetId(Icon), -- Utilise la fonction pour normaliser l'ID
             ImageColor3 = Color3.fromRGB(150, 150, 150),
             ZIndex = 10,
             Parent = Sidebar
@@ -3652,7 +3669,7 @@ function Library:CreateWindow(...)
         Size = UDim2.fromOffset(52, 52),
         Position = UDim2.new(0, 20, 0.5, -26),
         BackgroundColor3 = Library.MainColor,
-        Image = "",
+        Image = logoAssetId, -- Utilise le même Asset ID que le logo du titre
         Visible = true, -- Toujours visible pour mobile
         Parent = ScreenGui,
         ZIndex = 2000
@@ -3660,18 +3677,6 @@ function Library:CreateWindow(...)
     Library:Create('UICorner', { CornerRadius = UDim.new(0, 8), Parent = FloatingButton })
     Library:Create('UIStroke', { Color = Library.AccentColor, Thickness = 2, Parent = FloatingButton })
     Library:MakeDraggable(FloatingButton)
-
-    -- Utilise le même logoAssetId défini plus haut
-    task.spawn(pcall, function()
-        if writefile and getcustomasset and game.HttpGet then
-            if not isfile("linoria_mobile_icon.webp") then
-                writefile("linoria_mobile_icon.webp", game:HttpGet(logoUrl)) -- Utilise logoUrl pour le téléchargement
-            end
-            FloatingButton.Image = getcustomasset("linoria_mobile_icon.webp")
-        else
-            FloatingButton.Image = logoUrl -- Utilise logoUrl si getcustomasset n'est pas dispo
-        end
-    end)
     
     -- Logique pour différencier le Drag du Click
     local dragStartPos
