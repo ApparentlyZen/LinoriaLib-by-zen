@@ -3047,8 +3047,8 @@ function Library:CreateWindow(...)
     local MainSectionOuter = Library:Create('Frame', {
         BackgroundColor3 = Library.BackgroundColor;
         BorderColor3 = Library.OutlineColor;
-        Position = UDim2.new(0, 8, 0, 25);
-        Size = UDim2.new(1, -16, 1, -33);
+        Position = UDim2.new(0, 52, 0, 25);
+        Size = UDim2.new(1, -60, 1, -33);
         ZIndex = 1;
         Parent = Inner;
     });
@@ -3071,6 +3071,67 @@ function Library:CreateWindow(...)
     Library:AddToRegistry(MainSectionInner, {
         BackgroundColor3 = 'BackgroundColor';
     });
+
+    local Sidebar = Library:Create('Frame', {
+        BackgroundColor3 = Library.BackgroundColor;
+        BackgroundTransparency = 0.5;
+        Position = UDim2.new(0, 4, 0, 25);
+        Size = UDim2.new(0, 44, 1, -33);
+        ZIndex = 1;
+        Parent = Inner;
+    });
+    Library:Create('UICorner', { CornerRadius = UDim.new(0, 8), Parent = Sidebar })
+
+    local SidebarLayout = Library:Create('UIListLayout', {
+        Padding = UDim.new(0, 10);
+        FillDirection = Enum.FillDirection.Vertical;
+        HorizontalAlignment = Enum.HorizontalAlignment.Center;
+        VerticalAlignment = Enum.VerticalAlignment.Top;
+        Parent = Sidebar;
+    });
+    Library:Create('UIPadding', { PaddingTop = UDim.new(0, 10), Parent = Sidebar })
+
+    Window.Categories = {}
+    Window.CurrentCategory = nil
+
+    function Window:SelectCategory(Name)
+        Window.CurrentCategory = Name
+        for CatName, Config in next, Window.Categories do
+            local IsActive = (CatName == Name)
+            TweenService:Create(Config.Button, TweenInfo.new(0.2), { ImageColor3 = IsActive and Library.AccentColor or Color3.fromRGB(150, 150, 150) }):Play()
+            
+            for _, Tab in next, Window.Tabs do
+                if Tab.Category == CatName then
+                    Tab.TabButton.Visible = IsActive
+                end
+            end
+        end
+        
+        -- Sélectionne automatiquement le premier onglet de la catégorie
+        for _, Tab in next, Window.Tabs do
+            if Tab.Category == Name then
+                Tab:ShowTab()
+                break
+            end
+        end
+    end
+
+    function Window:AddCategory(Name, Icon)
+        local CatButton = Library:Create('ImageButton', {
+            Size = UDim2.fromOffset(28, 28),
+            BackgroundTransparency = 1,
+            Image = Icon,
+            ImageColor3 = Color3.fromRGB(150, 150, 150),
+            ZIndex = 2,
+            Parent = Sidebar
+        })
+
+        CatButton.MouseButton1Click:Connect(function()
+            Window:SelectCategory(Name)
+        end)
+
+        Window.Categories[Name] = { Button = CatButton }
+    end
 
     local TabArea = Library:Create('Frame', {
         BackgroundTransparency = 1;
@@ -3106,10 +3167,11 @@ function Library:CreateWindow(...)
         WindowLabel.Text = Title;
     end;
 
-    function Window:AddTab(Name)
+    function Window:AddTab(Name, Category)
         local Tab = {
             Groupboxes = {};
             Tabboxes = {};
+            Category = Category or "Combat";
         };
 
         local TabButtonWidth = Library:GetTextBounds(Name, Library.Font, 16);
@@ -3120,7 +3182,9 @@ function Library:CreateWindow(...)
             Size = UDim2.new(0, TabButtonWidth + 8 + 4, 1, 0);
             ZIndex = 1;
             Parent = TabArea;
+            Visible = false; -- Caché par défaut jusqu'à sélection de la catégorie
         });
+        Tab.TabButton = TabButton;
 
         Library:Create('UICorner', { CornerRadius = UDim.new(0, 4), Parent = TabButton });
 
