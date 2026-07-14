@@ -116,7 +116,7 @@ end;
 -- Helper function to normalize asset IDs/URLs
 function Library:NormalizeAssetId(id)
     if type(id) == "number" then
-        return "rbxassetid://" .. id
+        return "rbxassetid://" .. string.format("%.0f", id)
     elseif type(id) == "string" then
         -- If it's already an rbxassetid, http, or https URL, use it directly
         if id:find("rbxassetid://") or id:find("http://") or id:find("https://") then
@@ -2990,9 +2990,8 @@ function Library:CreateWindow(...)
     if typeof(Config.Position) ~= 'UDim2' then Config.Position = UDim2.fromScale(0.5, 0.5) end
     if typeof(Config.Size) ~= 'UDim2' then Config.Size = UDim2.fromOffset(600, 350) end -- Plus horizontal pour mobile
 
-    -- Utilise un Asset ID Roblox fiable pour le logo principal
-    -- (Ex: 10747373176 est l'icône "Swords" - tu peux la changer si tu as un autre ID préféré)
-    local logoAssetId = Library:NormalizeAssetId(122765407222246) 
+    -- Utilise ton ID spécifique comme logo par défaut
+    local logoAssetId = Library:NormalizeAssetId(Config.Logo or 122765407222246) 
 
     -- Initialisation du flou
     if not Library.Blur then
