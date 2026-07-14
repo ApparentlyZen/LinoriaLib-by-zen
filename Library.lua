@@ -3851,12 +3851,13 @@ function Library:CreateWindow(...)
                     Size = UDim2.new(0, 0, 1, 0),
                     BackgroundColor3 = Library.AccentColor,
                     BackgroundTransparency = 1,
+                        ZIndex = 10006,
                     Parent = BarBack
                 })
 
                 -- Séquence d'animation : Apparition
                 local IntroFade = TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-                TweenService:Create(InjectFrame, IntroFade, { BackgroundTransparency = 0.05 }):Play()
+                    TweenService:Create(InjectFrame, IntroFade, { BackgroundTransparency = 0.15 }):Play() -- Moins sombre
                 TweenService:Create(Stroke, IntroFade, { Transparency = 0 }):Play()
                 TweenService:Create(Title, IntroFade, { TextTransparency = 0 }):Play()
                 TweenService:Create(BarBack, IntroFade, { BackgroundTransparency = 0 }):Play()
