@@ -3076,8 +3076,8 @@ function Library:CreateWindow(...)
 
     -- Logo à côté du titre
     local WindowLogo = Library:Create('ImageLabel', {
-        Size = UDim2.fromOffset(32, 32),
-        Position = UDim2.new(0, 10, 0.5, -16),
+        Size = UDim2.fromOffset(24, 24),
+        Position = UDim2.new(0, 10, 0.5, -12),
         Image = logoAssetId, -- Utilise l'Asset ID ou l'URL chargée
         BackgroundTransparency = 1,
         ZIndex = 6, -- Plus haut que la barre de titre
@@ -3085,7 +3085,7 @@ function Library:CreateWindow(...)
     })
 
     local WindowLabel = Library:CreateLabel({
-        Position = UDim2.new(0, 10 + 32 + 15, 0, 0); -- Après le logo + 15px de padding
+        Position = UDim2.new(0, 10 + 24 + 10, 0, 0); -- Après le logo + 10px de padding
         Size = UDim2.new(0, 0, 1, 0); -- Prend toute la hauteur de TitleBarFrame
         RichText = true;
         Text = (Config.Title == 'NamelessWare') and '<font color="rgb(255, 255, 255)">Nameless</font><font color="rgb(160, 80, 255)">Ware</font>' or (Config.Title or '');
@@ -3169,7 +3169,7 @@ function Library:CreateWindow(...)
 
     function Window:AddCategory(Name, Icon)
         local CatButton = Library:Create('ImageButton', {
-            Size = UDim2.fromOffset(42, 42),
+            Size = UDim2.fromOffset(28, 28),
             BackgroundTransparency = 1,
             Image = Library:NormalizeAssetId(Icon), -- Utilise la fonction pour normaliser l'ID
             ImageColor3 = Color3.fromRGB(150, 150, 150),
@@ -3678,8 +3678,8 @@ function Library:CreateWindow(...)
 
     -- Bouton flottant pour mobile
     local FloatingButton = Library:Create('ImageButton', {
-        Size = UDim2.fromOffset(52, 52),
-        Position = UDim2.new(0, 20, 0.5, -26),
+        Size = UDim2.fromOffset(40, 40),
+        Position = UDim2.new(0, 20, 0.5, -20),
         BackgroundColor3 = Library.MainColor,
         Image = logoAssetId, -- Utilise le même Asset ID que le logo du titre
         Visible = true, -- Toujours visible pour mobile
@@ -3796,7 +3796,7 @@ function Library:CreateWindow(...)
         end
 
         -- Animation de l'icône flottante (petite pression)
-        TweenService:Create(FloatingButton, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, true), { Size = UDim2.fromOffset(45, 45) }):Play()
+        TweenService:Create(FloatingButton, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, true), { Size = UDim2.fromOffset(34, 34) }):Play()
 
         for _, Desc in next, Outer:GetDescendants() do
             local Properties = {};
