@@ -3098,7 +3098,13 @@ function Library:CreateWindow(...)
         Window.CurrentCategory = Name
         for CatName, Config in next, Window.Categories do
             local IsActive = (CatName == Name)
-            TweenService:Create(Config.Button, TweenInfo.new(0.2), { ImageColor3 = IsActive and Library.AccentColor or Color3.fromRGB(150, 150, 150) }):Play()
+            local TargetColor = IsActive and Library.AccentColor or Color3.fromRGB(150, 150, 150)
+            
+            if Config.Button:IsA('ImageButton') then
+                TweenService:Create(Config.Button, TweenInfo.new(0.2), { ImageColor3 = TargetColor }):Play()
+            else
+                TweenService:Create(Config.Button, TweenInfo.new(0.2), { TextColor3 = TargetColor }):Play()
+            end
             
             for _, Tab in next, Window.Tabs do
                 if Tab.Category == CatName then
@@ -3117,12 +3123,20 @@ function Library:CreateWindow(...)
     end
 
     function Window:AddCategory(Name, Icon)
-        local CatButton = Library:Create('ImageButton', {
+        -- Détection automatique : Nombre (ID), String (Lien/ID) ou Emoji
+        local IsEmoji = type(Icon) == "string" and #Icon <= 4 -- Un emoji est court
+        local ImageId = type(Icon) == "number" and "rbxassetid://" .. Icon or Icon
+
+        local CatButton = Library:Create(IsEmoji and 'TextButton' or 'ImageButton', {
             Size = UDim2.fromOffset(28, 28),
             BackgroundTransparency = 1,
-            Image = Icon,
+            Image = not IsEmoji and ImageId or "",
+            Text = IsEmoji and Icon or "",
+            Font = Enum.Font.GothamBold,
+            TextSize = 22,
+            TextColor3 = Color3.fromRGB(150, 150, 150),
             ImageColor3 = Color3.fromRGB(150, 150, 150),
-            ZIndex = 2,
+            ZIndex = 5, -- Augmenté pour être sûr que ce soit au dessus
             Parent = Sidebar
         })
 
