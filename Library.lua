@@ -3747,7 +3747,33 @@ function Library:CreateWindow(...)
 
     if Config.AutoShow then 
         if Config.AnimateIntro then
-            task.spawn(Library.Toggle) 
+            task.spawn(function()
+                local SplashLabel = Library:CreateLabel({
+                    Size = UDim2.fromScale(1, 1),
+                    Text = "Welcome to namelessWare",
+                    TextSize = 35,
+                    TextTransparency = 1,
+                    ZIndex = 10000,
+                    Parent = ScreenGui,
+                })
+                
+                -- Animation d'entrée
+                local FadeIn = TweenService:Create(SplashLabel, TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { TextTransparency = 0 })
+                FadeIn:Play()
+                FadeIn.Completed:Wait()
+                
+                task.wait(1.5)
+                
+                -- Animation de sortie
+                local FadeOut = TweenService:Create(SplashLabel, TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.In), { TextTransparency = 1 })
+                FadeOut:Play()
+                FadeOut.Completed:Wait()
+                
+                SplashLabel:Destroy()
+                
+                -- Ouverture du menu après l'animation
+                Library:Toggle()
+            end)
         else
             Library:Toggle(true)
         end
