@@ -3563,15 +3563,16 @@ function Library:CreateWindow(...)
 
     -- Bouton flottant pour mobile
     local FloatingButton = Library:Create('ImageButton', {
-        Size = UDim2.fromOffset(50, 50),
-        Position = UDim2.new(0, 20, 0.5, -25),
-        BackgroundColor3 = Library.AccentColor,
+        Size = UDim2.fromOffset(52, 52),
+        Position = UDim2.new(0, 20, 0.5, -26),
+        BackgroundColor3 = Library.MainColor,
         Image = "",
         Visible = true, -- Toujours visible pour mobile
         Parent = ScreenGui,
         ZIndex = 2000
     })
-    Library:Create('UICorner', { CornerRadius = UDim.new(1, 0), Parent = FloatingButton })
+    Library:Create('UICorner', { CornerRadius = UDim.new(0, 8), Parent = FloatingButton })
+    Library:Create('UIStroke', { Color = Library.AccentColor, Thickness = 2, Parent = FloatingButton })
     Library:MakeDraggable(FloatingButton)
 
     local imageUrl = "https://github.com/ApparentlyZen/image-namelessWare/blob/main/165abdd521328d77324b02ce8a77e090_1780162334922.webp?raw=true"
@@ -3750,7 +3751,7 @@ function Library:CreateWindow(...)
             task.spawn(function()
                 -- Création du petit carré central (Card)
                 local InjectFrame = Library:Create('Frame', {
-                    Size = UDim2.fromOffset(280, 100),
+                    Size = UDim2.fromOffset(300, 110),
                     Position = UDim2.fromScale(0.5, 0.5),
                     AnchorPoint = Vector2.new(0.5, 0.5),
                     BackgroundColor3 = Library.MainColor,
@@ -3760,13 +3761,13 @@ function Library:CreateWindow(...)
                     ZIndex = 10001
                 })
                 
-                Library:Create('UICorner', { CornerRadius = UDim.new(0, 12), Parent = InjectFrame })
+                Library:Create('UICorner', { CornerRadius = UDim.new(0, 4), Parent = InjectFrame })
                 local Stroke = Library:Create('UIStroke', { Color = Library.AccentColor, Thickness = 2, Transparency = 1, Parent = InjectFrame })
 
                 local Title = Library:CreateLabel({
                     Size = UDim2.new(1, 0, 0, 40),
                     Position = UDim2.new(0, 0, 0.15, 0),
-                    Text = "Injecting namelessWare...",
+                    Text = "Initializing...",
                     TextSize = 18,
                     TextTransparency = 1,
                     Parent = InjectFrame
@@ -3793,24 +3794,33 @@ function Library:CreateWindow(...)
 
                 -- Séquence d'animation : Apparition
                 local IntroFade = TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-                TweenService:Create(InjectFrame, IntroFade, { BackgroundTransparency = 0.15 }):Play()
-                TweenService:Create(Stroke, IntroFade, { Transparency = 0.5 }):Play()
+                TweenService:Create(InjectFrame, IntroFade, { BackgroundTransparency = 0.05 }):Play()
+                TweenService:Create(Stroke, IntroFade, { Transparency = 0 }):Play()
                 TweenService:Create(Title, IntroFade, { TextTransparency = 0 }):Play()
                 TweenService:Create(BarBack, IntroFade, { BackgroundTransparency = 0 }):Play()
                 TweenService:Create(BarFill, IntroFade, { BackgroundTransparency = 0 }):Play()
                 
                 task.wait(0.6)
 
-                -- Animation de la barre (Injection)
-                local Progress = TweenService:Create(BarFill, TweenInfo.new(2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), { Size = UDim2.fromScale(1, 1) })
-                Progress:Play()
-                Progress.Completed:Wait()
+                -- Animation par étapes style external
+                local Steps = {
+                    { 0.3, "Checking Version..." },
+                    { 0.6, "Bypassing Security..." },
+                    { 0.8, "Injecting namelessWare..." },
+                    { 1.0, "Injection Successful" }
+                }
+
+                for i, step in next, Steps do
+                    Title.Text = step[2]
+                    if i == #Steps then Title.TextColor3 = Color3.fromRGB(100, 255, 100) end
+                    
+                    local Progress = TweenService:Create(BarFill, TweenInfo.new(0.8, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), { Size = UDim2.fromScale(step[1], 1) })
+                    Progress:Play()
+                    Progress.Completed:Wait()
+                    task.wait(0.3)
+                end
                 
-                -- Changement d'état à 100%
-                Title.Text = "Injection Successful"
-                Title.TextColor3 = Color3.fromRGB(100, 255, 100) -- Passage au vert pour le succès
-                
-                task.wait(0.8)
+                task.wait(0.5)
 
                 -- Disparition
                 TweenService:Create(InjectFrame, TweenInfo.new(0.5), { BackgroundTransparency = 1 }):Play()
