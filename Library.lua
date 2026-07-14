@@ -3070,7 +3070,6 @@ function Library:CreateWindow(...)
         BackgroundTransparency = 1,
         Position = UDim2.new(0, 0, 0, 0),
         Size = UDim2.new(1, 0, 0, 25), -- Hauteur de la barre de titre
-        Size = UDim2.new(1, 0, 0, 40), -- Hauteur de la barre de titre
         ZIndex = 5, -- Augmenté pour passer devant
         Parent = Inner,
     })
@@ -3079,8 +3078,6 @@ function Library:CreateWindow(...)
     local WindowLogo = Library:Create('ImageLabel', {
         Size = UDim2.fromOffset(20, 20),
         Position = UDim2.new(0, 7, 0.5, -10),
-        Size = UDim2.fromOffset(32, 32),
-        Position = UDim2.new(0, 10, 0.5, -16),
         Image = logoAssetId, -- Utilise l'Asset ID ou l'URL chargée
         BackgroundTransparency = 1,
         ZIndex = 6, -- Plus haut que la barre de titre
@@ -3089,7 +3086,6 @@ function Library:CreateWindow(...)
 
     local WindowLabel = Library:CreateLabel({
         Position = UDim2.new(0, 7 + 20 + 5, 0, 0); -- Après le logo + 5px de padding
-        Position = UDim2.new(0, 10 + 32 + 10, 0, 0); -- Après le logo + 10px de padding
         Size = UDim2.new(0, 0, 1, 0); -- Prend toute la hauteur de TitleBarFrame
         RichText = true;
         Text = (Config.Title == 'NamelessWare') and '<font color="rgb(255, 255, 255)">Nameless</font><font color="rgb(160, 80, 255)">Ware</font>' or (Config.Title or '');
@@ -3104,8 +3100,6 @@ function Library:CreateWindow(...)
         BorderColor3 = Library.OutlineColor;
         Position = UDim2.new(0, 52, 0, 25);
         Size = UDim2.new(1, -60, 1, -33);
-        Position = UDim2.new(0, 72, 0, 40);
-        Size = UDim2.new(1, -80, 1, -48);
         ZIndex = 1;
         Parent = Inner;
     });
@@ -3134,8 +3128,6 @@ function Library:CreateWindow(...)
         BackgroundTransparency = 0.5;
         Position = UDim2.new(0, 4, 0, 25); -- Commence après la TitleBarFrame
         Size = UDim2.new(0, 44, 1, -33);
-        Position = UDim2.new(0, 4, 0, 40); -- Commence après la TitleBarFrame
-        Size = UDim2.new(0, 64, 1, -48);
         ZIndex = 1;
         Parent = Inner;
     });
@@ -3178,7 +3170,6 @@ function Library:CreateWindow(...)
     function Window:AddCategory(Name, Icon)
         local CatButton = Library:Create('ImageButton', {
             Size = UDim2.fromOffset(28, 28),
-            Size = UDim2.fromOffset(42, 42),
             BackgroundTransparency = 1,
             Image = Library:NormalizeAssetId(Icon), -- Utilise la fonction pour normaliser l'ID
             ImageColor3 = Color3.fromRGB(150, 150, 150),
