@@ -3085,7 +3085,7 @@ function Library:CreateWindow(...)
     })
 
     local WindowLabel = Library:CreateLabel({
-        Position = UDim2.new(0, 10 + 32 + 10, 0, 0); -- Après le logo + 10px de padding
+        Position = UDim2.new(0, 10 + 32 + 15, 0, 0); -- Après le logo + 15px de padding
         Size = UDim2.new(0, 0, 1, 0); -- Prend toute la hauteur de TitleBarFrame
         RichText = true;
         Text = (Config.Title == 'NamelessWare') and '<font color="rgb(255, 255, 255)">Nameless</font><font color="rgb(160, 80, 255)">Ware</font>' or (Config.Title or '');
