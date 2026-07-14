@@ -3069,15 +3069,18 @@ function Library:CreateWindow(...)
     local TitleBarFrame = Library:Create('Frame', {
         BackgroundTransparency = 1,
         Position = UDim2.new(0, 0, 0, 0),
-        Size = UDim2.new(1, 0, 0, 20), -- Hauteur de la barre de titre
+        Size = UDim2.new(1, 0, 0, 25), -- Hauteur de la barre de titre
+        Size = UDim2.new(1, 0, 0, 40), -- Hauteur de la barre de titre
         ZIndex = 5, -- Augmenté pour passer devant
         Parent = Inner,
     })
 
     -- Logo à côté du titre
     local WindowLogo = Library:Create('ImageLabel', {
-        Size = UDim2.fromOffset(24, 24),
-        Position = UDim2.new(0, 10, 0.5, -12),
+        Size = UDim2.fromOffset(20, 20),
+        Position = UDim2.new(0, 7, 0.5, -10),
+        Size = UDim2.fromOffset(32, 32),
+        Position = UDim2.new(0, 10, 0.5, -16),
         Image = logoAssetId, -- Utilise l'Asset ID ou l'URL chargée
         BackgroundTransparency = 1,
         ZIndex = 6, -- Plus haut que la barre de titre
@@ -3085,7 +3088,8 @@ function Library:CreateWindow(...)
     })
 
     local WindowLabel = Library:CreateLabel({
-        Position = UDim2.new(0, 10 + 24 + 10, 0, 0); -- Après le logo + 10px de padding
+        Position = UDim2.new(0, 7 + 20 + 5, 0, 0); -- Après le logo + 5px de padding
+        Position = UDim2.new(0, 10 + 32 + 10, 0, 0); -- Après le logo + 10px de padding
         Size = UDim2.new(0, 0, 1, 0); -- Prend toute la hauteur de TitleBarFrame
         RichText = true;
         Text = (Config.Title == 'NamelessWare') and '<font color="rgb(255, 255, 255)">Nameless</font><font color="rgb(160, 80, 255)">Ware</font>' or (Config.Title or '');
@@ -3098,6 +3102,8 @@ function Library:CreateWindow(...)
     local MainSectionOuter = Library:Create('Frame', {
         BackgroundColor3 = Library.BackgroundColor;
         BorderColor3 = Library.OutlineColor;
+        Position = UDim2.new(0, 52, 0, 25);
+        Size = UDim2.new(1, -60, 1, -33);
         Position = UDim2.new(0, 72, 0, 40);
         Size = UDim2.new(1, -80, 1, -48);
         ZIndex = 1;
@@ -3126,6 +3132,8 @@ function Library:CreateWindow(...)
     local Sidebar = Library:Create('Frame', {
         BackgroundColor3 = Library.BackgroundColor;
         BackgroundTransparency = 0.5;
+        Position = UDim2.new(0, 4, 0, 25); -- Commence après la TitleBarFrame
+        Size = UDim2.new(0, 44, 1, -33);
         Position = UDim2.new(0, 4, 0, 40); -- Commence après la TitleBarFrame
         Size = UDim2.new(0, 64, 1, -48);
         ZIndex = 1;
@@ -3134,7 +3142,7 @@ function Library:CreateWindow(...)
     Library:Create('UICorner', { CornerRadius = UDim.new(0, 8), Parent = Sidebar })
 
     local SidebarLayout = Library:Create('UIListLayout', {
-        Padding = UDim.new(0, 40);
+        Padding = UDim.new(0, 10);
         FillDirection = Enum.FillDirection.Vertical;
         HorizontalAlignment = Enum.HorizontalAlignment.Center;
         VerticalAlignment = Enum.VerticalAlignment.Top;
@@ -3170,6 +3178,7 @@ function Library:CreateWindow(...)
     function Window:AddCategory(Name, Icon)
         local CatButton = Library:Create('ImageButton', {
             Size = UDim2.fromOffset(28, 28),
+            Size = UDim2.fromOffset(42, 42),
             BackgroundTransparency = 1,
             Image = Library:NormalizeAssetId(Icon), -- Utilise la fonction pour normaliser l'ID
             ImageColor3 = Color3.fromRGB(150, 150, 150),
@@ -3678,8 +3687,8 @@ function Library:CreateWindow(...)
 
     -- Bouton flottant pour mobile
     local FloatingButton = Library:Create('ImageButton', {
-        Size = UDim2.fromOffset(40, 40),
-        Position = UDim2.new(0, 20, 0.5, -20),
+        Size = UDim2.fromOffset(52, 52),
+        Position = UDim2.new(0, 20, 0.5, -26),
         BackgroundColor3 = Library.MainColor,
         Image = logoAssetId, -- Utilise le même Asset ID que le logo du titre
         Visible = true, -- Toujours visible pour mobile
@@ -3796,7 +3805,7 @@ function Library:CreateWindow(...)
         end
 
         -- Animation de l'icône flottante (petite pression)
-        TweenService:Create(FloatingButton, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, true), { Size = UDim2.fromOffset(34, 34) }):Play()
+        TweenService:Create(FloatingButton, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, true), { Size = UDim2.fromOffset(45, 45) }):Play()
 
         for _, Desc in next, Outer:GetDescendants() do
             local Properties = {};
