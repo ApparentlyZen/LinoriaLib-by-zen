@@ -3792,11 +3792,12 @@ function Library:CreateWindow(...)
                 Library:Create('UICorner', { CornerRadius = UDim.new(1, 0), Parent = BarFill })
 
                 -- Séquence d'animation : Apparition
-                TweenService:Create(InjectFrame, TweenInfo.new(0.5), { BackgroundTransparency = 0.15 }):Play()
-                TweenService:Create(Stroke, TweenInfo.new(0.5), { Transparency = 0.5 }):Play()
-                TweenService:Create(Title, TweenInfo.new(0.5), { TextTransparency = 0 }):Play()
-                TweenService:Create(BarBack, TweenInfo.new(0.5), { BackgroundTransparency = 0 }):Play()
-                TweenService:Create(BarFill, TweenInfo.new(0.5), { BackgroundTransparency = 0 }):Play()
+                local IntroFade = TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+                TweenService:Create(InjectFrame, IntroFade, { BackgroundTransparency = 0.15 }):Play()
+                TweenService:Create(Stroke, IntroFade, { Transparency = 0.5 }):Play()
+                TweenService:Create(Title, IntroFade, { TextTransparency = 0 }):Play()
+                TweenService:Create(BarBack, IntroFade, { BackgroundTransparency = 0 }):Play()
+                TweenService:Create(BarFill, IntroFade, { BackgroundTransparency = 0 }):Play()
                 
                 task.wait(0.6)
 
@@ -3805,7 +3806,11 @@ function Library:CreateWindow(...)
                 Progress:Play()
                 Progress.Completed:Wait()
                 
-                task.wait(0.4)
+                -- Changement d'état à 100%
+                Title.Text = "Injection Successful"
+                Title.TextColor3 = Color3.fromRGB(100, 255, 100) -- Passage au vert pour le succès
+                
+                task.wait(0.8)
 
                 -- Disparition
                 TweenService:Create(InjectFrame, TweenInfo.new(0.5), { BackgroundTransparency = 1 }):Play()
