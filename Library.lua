@@ -1458,7 +1458,7 @@ do
                 Size = UDim2.new(1, -4, 0, 20);
                 ZIndex = 5;
             });
-            Library:Create('UICorner', { CornerRadius = UDim.new(0, 4), Parent = Outer })
+            Library:Create('UICorner', { CornerRadius = UDim.new(1, 0), Parent = Outer })
 
             local Inner = Library:Create('Frame', {
                 BackgroundColor3 = Library.MainColor;
@@ -1468,7 +1468,7 @@ do
                 ZIndex = 6;
                 Parent = Outer;
             });
-            Library:Create('UICorner', { CornerRadius = UDim.new(0, 4), Parent = Inner })
+            Library:Create('UICorner', { CornerRadius = UDim.new(1, 0), Parent = Inner })
 
             local Label = Library:CreateLabel({
                 Size = UDim2.new(1, 0, 1, 0);
@@ -1688,7 +1688,7 @@ do
             ZIndex = 5;
             Parent = Container;
         });
-        Library:Create('UICorner', { CornerRadius = UDim.new(0, 4), Parent = TextBoxOuter })
+        Library:Create('UICorner', { CornerRadius = UDim.new(1, 0), Parent = TextBoxOuter })
 
         local TextBoxInner = Library:Create('Frame', {
             BackgroundColor3 = Library.MainColor;
@@ -1698,7 +1698,7 @@ do
             ZIndex = 6;
             Parent = TextBoxOuter;
         });
-        Library:Create('UICorner', { CornerRadius = UDim.new(0, 4), Parent = TextBoxInner })
+        Library:Create('UICorner', { CornerRadius = UDim.new(1, 0), Parent = TextBoxInner })
 
         Library:AddToRegistry(TextBoxInner, {
             BackgroundColor3 = 'MainColor';
@@ -1865,7 +1865,7 @@ do
             ZIndex = 5;
             Parent = Container;
         });
-        Library:Create('UICorner', { CornerRadius = UDim.new(0, 4), Parent = ToggleOuter })
+        Library:Create('UICorner', { CornerRadius = UDim.new(1, 0), Parent = ToggleOuter })
 
         Library:AddToRegistry(ToggleOuter, {
             BorderColor3 = 'Black';
@@ -1879,7 +1879,7 @@ do
             ZIndex = 6;
             Parent = ToggleOuter;
         });
-        Library:Create('UICorner', { CornerRadius = UDim.new(0, 4), Parent = ToggleInner })
+        Library:Create('UICorner', { CornerRadius = UDim.new(1, 0), Parent = ToggleInner })
 
         Library:AddToRegistry(ToggleInner, {
             BackgroundColor3 = 'MainColor';
@@ -2024,7 +2024,7 @@ do
             ZIndex = 5;
             Parent = Container;
         });
-        Library:Create('UICorner', { CornerRadius = UDim.new(0, 4), Parent = SliderOuter })
+        Library:Create('UICorner', { CornerRadius = UDim.new(1, 0), Parent = SliderOuter })
 
         Library:AddToRegistry(SliderOuter, {
             BorderColor3 = 'Black';
@@ -2038,7 +2038,7 @@ do
             ZIndex = 6;
             Parent = SliderOuter;
         });
-        Library:Create('UICorner', { CornerRadius = UDim.new(0, 4), Parent = SliderInner })
+        Library:Create('UICorner', { CornerRadius = UDim.new(1, 0), Parent = SliderInner })
 
         Library:AddToRegistry(SliderInner, {
             BackgroundColor3 = 'MainColor';
@@ -2238,7 +2238,7 @@ do
             ZIndex = 5;
             Parent = Container;
         });
-        Library:Create('UICorner', { CornerRadius = UDim.new(0, 4), Parent = DropdownOuter })
+        Library:Create('UICorner', { CornerRadius = UDim.new(1, 0), Parent = DropdownOuter })
 
         Library:AddToRegistry(DropdownOuter, {
             BorderColor3 = 'Black';
@@ -2252,7 +2252,7 @@ do
             ZIndex = 6;
             Parent = DropdownOuter;
         });
-        Library:Create('UICorner', { CornerRadius = UDim.new(0, 4), Parent = DropdownInner })
+        Library:Create('UICorner', { CornerRadius = UDim.new(1, 0), Parent = DropdownInner })
 
         Library:AddToRegistry(DropdownInner, {
             BackgroundColor3 = 'MainColor';
@@ -3692,7 +3692,7 @@ function Library:CreateWindow(...)
         Parent = ScreenGui,
         ZIndex = 2000
     })
-    Library:Create('UICorner', { CornerRadius = UDim.new(0, 8), Parent = FloatingButton })
+    Library:Create('UICorner', { CornerRadius = UDim.new(1, 0), Parent = FloatingButton })
     Library:Create('UIStroke', { Color = Library.AccentColor, Thickness = 2, Parent = FloatingButton })
     Library:MakeDraggable(FloatingButton)
     
