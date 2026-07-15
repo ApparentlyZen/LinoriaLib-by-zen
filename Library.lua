@@ -30,11 +30,11 @@ local Library = {
     HudRegistry = {};
 
     FontColor = Color3.fromRGB(255, 255, 255);
-    MainColor = Color3.fromRGB(15, 12, 22); -- Violet très sombre
-    BackgroundColor = Color3.fromRGB(10, 8, 15); -- Fond plus profond
+    MainColor = Color3.fromRGB(20, 18, 28); -- Un peu plus clair pour la transparence
+    BackgroundColor = Color3.fromRGB(15, 13, 20);
     AccentColor = Color3.fromRGB(160, 80, 255); -- Violet électrique
     OutlineColor = Color3.fromRGB(45, 40, 60);
-    RiskColor = Color3.fromRGB(255, 50, 50),
+    RiskColor = Color3.fromRGB(255, 80, 80),
 
     Black = Color3.new(0, 0, 0);
     Font = Enum.Font.BuilderSansExtraBold,
@@ -3050,14 +3050,14 @@ function Library:CreateWindow(...)
     local Inner = Library:Create('Frame', {
         BackgroundColor3 = Library.MainColor;
         BorderColor3 = Library.AccentColor;
-        BorderMode = Enum.BorderMode.Inset;
-        BackgroundTransparency = 0.15; -- Légère transparence
+        BorderSizePixel = 0;
+        BackgroundTransparency = 0.25; -- Plus de transparence style Matcha
         Position = UDim2.new(0, 1, 0, 1);
         Size = UDim2.new(1, -2, 1, -2);
         ZIndex = 1;
         Parent = Outer;
     });
-    
+
     Library:Create('UICorner', { CornerRadius = UDim.new(0, 12), Parent = Inner })
 
     Library:AddToRegistry(Inner, {
@@ -3098,11 +3098,13 @@ function Library:CreateWindow(...)
     local MainSectionOuter = Library:Create('Frame', {
         BackgroundColor3 = Library.BackgroundColor;
         BorderColor3 = Library.OutlineColor;
+        BackgroundTransparency = 0.4; -- Transparence interne
         Position = UDim2.new(0, 52, 0, 25);
         Size = UDim2.new(1, -60, 1, -33);
         ZIndex = 1;
         Parent = Inner;
     });
+    Library:Create('UICorner', { CornerRadius = UDim.new(0, 12), Parent = MainSectionOuter })
 
     Library:AddToRegistry(MainSectionOuter, {
         BackgroundColor3 = 'BackgroundColor';
@@ -3118,6 +3120,7 @@ function Library:CreateWindow(...)
         ZIndex = 1;
         Parent = MainSectionOuter;
     });
+    Library:Create('UICorner', { CornerRadius = UDim.new(0, 12), Parent = MainSectionInner })
 
     Library:AddToRegistry(MainSectionInner, {
         BackgroundColor3 = 'BackgroundColor';
@@ -3125,7 +3128,7 @@ function Library:CreateWindow(...)
 
     local Sidebar = Library:Create('Frame', {
         BackgroundColor3 = Library.BackgroundColor;
-        BackgroundTransparency = 0.5;
+        BackgroundTransparency = 0.7; -- Très transparent pour le côté flottant
         Position = UDim2.new(0, 4, 0, 25); -- Commence après la TitleBarFrame
         Size = UDim2.new(0, 44, 1, -33);
         ZIndex = 1;
@@ -3230,6 +3233,7 @@ function Library:CreateWindow(...)
         local TabButton = Library:Create('Frame', {
             BackgroundColor3 = Library.BackgroundColor;
             BorderColor3 = Library.OutlineColor;
+            BackgroundTransparency = 0.3;
             Size = UDim2.new(0, TabButtonWidth + 8 + 4, 1, 0);
             ZIndex = 1;
             Parent = TabArea;
@@ -3237,7 +3241,7 @@ function Library:CreateWindow(...)
         });
         Tab.TabButton = TabButton;
 
-        Library:Create('UICorner', { CornerRadius = UDim.new(0, 4), Parent = TabButton });
+        Library:Create('UICorner', { CornerRadius = UDim.new(0, 10), Parent = TabButton }); -- Plus rond
 
         Library:AddToRegistry(TabButton, {
             BackgroundColor3 = 'BackgroundColor';
@@ -3353,11 +3357,12 @@ function Library:CreateWindow(...)
             local BoxOuter = Library:Create('Frame', {
                 BackgroundColor3 = Library.BackgroundColor;
                 BorderColor3 = Library.OutlineColor;
-                BorderMode = Enum.BorderMode.Inset;
+                BackgroundTransparency = 0.2;
                 Size = UDim2.new(1, 0, 0, 0);
                 ZIndex = 2;
                 Parent = Info.Side == 1 and LeftSide or RightSide;
             });
+            Library:Create('UICorner', { CornerRadius = UDim.new(0, 12), Parent = BoxOuter })
 
             Library:AddToRegistry(BoxOuter, {
                 BackgroundColor3 = 'BackgroundColor';
@@ -3373,6 +3378,7 @@ function Library:CreateWindow(...)
                 ZIndex = 4;
                 Parent = BoxOuter;
             });
+            Library:Create('UICorner', { CornerRadius = UDim.new(0, 12), Parent = BoxInner })
 
             Library:AddToRegistry(BoxInner, {
                 BackgroundColor3 = 'BackgroundColor';
