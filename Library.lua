@@ -3077,7 +3077,7 @@ function Library:CreateWindow(...)
     -- Logo à côté du titre
     local WindowLogo = Library:Create('ImageLabel', {
         Size = UDim2.fromOffset(20, 20),
-        Position = UDim2.new(0, 7, 0.5, -10),
+        Position = UDim2.new(0, 15, 0.5, -10), -- Décalé du bord gauche
         Image = logoAssetId, -- Utilise l'Asset ID ou l'URL chargée
         BackgroundTransparency = 1,
         ZIndex = 6, -- Plus haut que la barre de titre
@@ -3085,7 +3085,7 @@ function Library:CreateWindow(...)
     })
 
     local WindowLabel = Library:CreateLabel({
-        Position = UDim2.new(0, 7 + 20 + 5, 0, 0); -- Après le logo + 5px de padding
+        Position = UDim2.new(0, 15 + 20 + 15, 0, 0); -- 15px d'écart entre le logo et le texte
         Size = UDim2.new(0, 0, 1, 0); -- Prend toute la hauteur de TitleBarFrame
         RichText = true;
         Text = (Config.Title == 'NamelessWare') and '<font color="rgb(255, 255, 255)">Nameless</font><font color="rgb(160, 80, 255)">Ware</font>' or (Config.Title or '');
@@ -3143,7 +3143,7 @@ function Library:CreateWindow(...)
         VerticalAlignment = Enum.VerticalAlignment.Top;
         Parent = Sidebar;
     });
-    Library:Create('UIPadding', { PaddingTop = UDim.new(0, 10), Parent = Sidebar })
+    Library:Create('UIPadding', { PaddingTop = UDim.new(0, 30), Parent = Sidebar }) -- Plus d'espace entre le titre et la première icône
 
     Window.Categories = {}
     Window.CurrentCategory = nil
