@@ -2991,7 +2991,7 @@ function Library:CreateWindow(...)
     if typeof(Config.Size) ~= 'UDim2' then Config.Size = UDim2.fromOffset(600, 350) end -- Plus horizontal pour mobile
 
     -- On reprend ton image GitHub qui fonctionne sur le bouton
-    local logoUrl = "https://github.com/ApparentlyZen/image-namelessWare/blob/main/165abdd521328d77324b02ce8a77e090_1780162334922.webp?raw=true"
+    local logoUrl = ""
     local logoAssetId = logoUrl
 
     -- On tente de la télécharger proprement pour plus de rapidité (comme sur le bouton)
