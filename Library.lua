@@ -30,8 +30,8 @@ local Library = {
     HudRegistry = {};
 
     FontColor = Color3.fromRGB(255, 255, 255);
-    MainColor = Color3.fromRGB(20, 18, 28); -- Un peu plus clair pour la transparence
-    BackgroundColor = Color3.fromRGB(15, 13, 20);
+    MainColor = Color3.fromRGB(15, 15, 22); 
+    BackgroundColor = Color3.fromRGB(10, 10, 15);
     AccentColor = Color3.fromRGB(160, 80, 255); -- Violet électrique
     OutlineColor = Color3.fromRGB(45, 40, 60);
     RiskColor = Color3.fromRGB(255, 80, 80),
@@ -3048,7 +3048,7 @@ function Library:CreateWindow(...)
         BackgroundColor3 = Library.MainColor;
         BorderColor3 = Library.AccentColor;
         BorderSizePixel = 0;
-        BackgroundTransparency = 0.25; -- Plus de transparence style Matcha
+        BackgroundTransparency = 0.45; -- Effet glass plus prononcé
         Position = UDim2.new(0, 1, 0, 1);
         Size = UDim2.new(1, -2, 1, -2);
         ZIndex = 1;
@@ -3085,7 +3085,7 @@ function Library:CreateWindow(...)
     local MainSectionOuter = Library:Create('Frame', {
         BackgroundColor3 = Library.BackgroundColor;
         BorderColor3 = Library.OutlineColor;
-        BackgroundTransparency = 0.4; -- Transparence interne
+        BackgroundTransparency = 0.65;
         Position = UDim2.new(0, 52, 0, 25);
         Size = UDim2.new(1, -60, 1, -33);
         ZIndex = 1;
@@ -3115,7 +3115,7 @@ function Library:CreateWindow(...)
 
     local Sidebar = Library:Create('Frame', {
         BackgroundColor3 = Library.BackgroundColor;
-        BackgroundTransparency = 0.7; -- Très transparent pour le côté flottant
+        BackgroundTransparency = 0.85; -- Sidebar Matcha style
         Position = UDim2.new(0, 4, 0, 25); -- Commence après la TitleBarFrame
         Size = UDim2.new(0, 44, 1, -33);
         ZIndex = 1;
@@ -3220,7 +3220,7 @@ function Library:CreateWindow(...)
         local TabButton = Library:Create('Frame', {
             BackgroundColor3 = Library.BackgroundColor;
             BorderColor3 = Library.OutlineColor;
-            BackgroundTransparency = 0.3;
+            BackgroundTransparency = 0.5;
             Size = UDim2.new(0, TabButtonWidth + 8 + 4, 1, 0);
             ZIndex = 1;
             Parent = TabArea;
@@ -3344,7 +3344,7 @@ function Library:CreateWindow(...)
             local BoxOuter = Library:Create('Frame', {
                 BackgroundColor3 = Library.BackgroundColor;
                 BorderColor3 = Library.OutlineColor;
-                BackgroundTransparency = 0.2;
+                BackgroundTransparency = 0.4;
                 Size = UDim2.new(1, 0, 0, 0);
                 ZIndex = 2;
                 Parent = Info.Side == 1 and LeftSide or RightSide;
@@ -3734,7 +3734,7 @@ function Library:CreateWindow(...)
             
             if not Instant then
                 MainScale.Scale = 0.8
-                TweenService:Create(MainScale, TweenInfo.new(FadeTime, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { Scale = 1 }):Play()
+                TweenService:Create(MainScale, TweenInfo.new(FadeTime, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), { Scale = 1 }):Play()
             end
             Outer.BackgroundTransparency = 0
 
@@ -3778,7 +3778,7 @@ function Library:CreateWindow(...)
             end);
         else
             if not Instant then
-                TweenService:Create(MainScale, TweenInfo.new(FadeTime, Enum.EasingStyle.Back, Enum.EasingDirection.In), { Scale = 0.8 }):Play()
+                TweenService:Create(MainScale, TweenInfo.new(FadeTime, Enum.EasingStyle.Quart, Enum.EasingDirection.In), { Scale = 0.8 }):Play()
             end
             FloatingButton.Visible = true;
         end;
@@ -3821,7 +3821,7 @@ function Library:CreateWindow(...)
                     continue;
                 end;
 
-                TweenService:Create(Desc, TweenInfo.new(FadeTime, Enum.EasingStyle.Linear), { [Prop] = Toggled and Cache[Prop] or 1 }):Play();
+                TweenService:Create(Desc, TweenInfo.new(FadeTime, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), { [Prop] = Toggled and Cache[Prop] or 1 }):Play();
             end;
         end;
 
