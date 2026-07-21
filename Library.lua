@@ -37,7 +37,7 @@ local Library = {
     RiskColor = Color3.fromRGB(255, 80, 80),
 
     Black = Color3.new(0, 0, 0);
-    Font = Enum.Font.GothamBold,
+    Font = Enum.Font.BuilderSansExtraBold,
 
     OpenedFrames = {};
     DependencyBoxes = {};
@@ -2111,59 +2111,60 @@ do
             Func(Slider.Value);
         end;
 
-        local function Round(Value)
+        local function roundValue(value)
             if Slider.Rounding == 0 then
-                return math.floor(Value);
-            end;
+                return math.floor(value)
+            end
+            return tonumber(string.format('%.' .. Slider.Rounding .. 'f', value))
+        end
 
+        function Slider:SetValue(newValue)
+            local num = tonumber(newValue)
+            if not num then return end
 
-            return tonumber(string.format('%.' .. Slider.Rounding .. 'f', Value))
-        end;
+            num = math.clamp(num, Slider.Min, Slider.Max)
+            Slider.Value = roundValue(num)
+            Slider:Display()
 
-        function Slider:GetValueFromXOffset(X)
-            return Round(Library:MapValue(X, 0, Slider.MaxSize, Slider.Min, Slider.Max));
-        end;
+            Library:SafeCallback(Slider.Callback, Slider.Value)
+            Library:SafeCallback(Slider.Changed, Slider.Value)
+        end
 
-        function Slider:SetValue(Str)
-            local Num = tonumber(Str);
+        local isSliding = false
 
-            if (not Num) then
-                return;
-            end;
+        local function updateSliderValue(currentMouseX)
+            local minX = SliderInner.AbsolutePosition.X
+            local maxX = minX + SliderInner.AbsoluteSize.X
+            local clampedMouseX = math.clamp(currentMouseX, minX, maxX)
 
-            Num = math.clamp(Num, Slider.Min, Slider.Max);
+            local percentage = (clampedMouseX - minX) / SliderInner.AbsoluteSize.X
+            local rawValue = Slider.Min + (Slider.Max - Slider.Min) * percentage
+            local newValue = roundValue(rawValue)
 
-            Slider.Value = Num;
-            Slider:Display();
-
-            Library:SafeCallback(Slider.Callback, Slider.Value);
-            Library:SafeCallback(Slider.Changed, Slider.Value);
-        end;
+            if newValue ~= Slider.Value then
+                Slider.Value = newValue
+                Slider:Display()
+                Library:SafeCallback(Slider.Callback, Slider.Value)
+                Library:SafeCallback(Slider.Changed, Slider.Value)
+            end
+        end
 
         SliderInner.InputBegan:Connect(function(Input)
-            if Input.UserInputType == Enum.UserInputType.MouseButton1 and not Library:MouseIsOverOpenedFrame() then
-                local mPos = Mouse.X;
-                local gPos = Fill.Size.X.Offset;
-                local Diff = mPos - (Fill.AbsolutePosition.X + gPos);
+            if (Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch) and not Library:MouseIsOverOpenedFrame() then
+                isSliding = true
+                updateSliderValue(Input.Position.X)
+            end
+        end)
 
-                while InputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) do
-                    local nMPos = Mouse.X;
-                    local nX = math.clamp(gPos + (nMPos - mPos) + Diff, 0, Slider.MaxSize);
+        InputService.InputChanged:Connect(function(Input)
+            if isSliding and (Input.UserInputType == Enum.UserInputType.MouseMovement or Input.UserInputType == Enum.UserInputType.Touch) then
+                updateSliderValue(Input.Position.X)
+            end
+        end)
 
-                    local nValue = Slider:GetValueFromXOffset(nX);
-                    local OldValue = Slider.Value;
-                    Slider.Value = nValue;
-
-                    Slider:Display();
-
-                    if nValue ~= OldValue then
-                        Library:SafeCallback(Slider.Callback, Slider.Value);
-                        Library:SafeCallback(Slider.Changed, Slider.Value);
-                    end;
-
-                    RenderStepped:Wait();
-                end;
-
+        InputService.InputEnded:Connect(function(Input)
+            if isSliding and (Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch) then
+                isSliding = false
                 Library:AttemptSave();
             end;
         end);
