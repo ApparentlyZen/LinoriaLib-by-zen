@@ -3025,6 +3025,7 @@ function Library:CreateWindow(...)
         BorderSizePixel = 0;
         Position = Config.Position,
         Size = Config.Size,
+        BackgroundTransparency = 1; -- Fond parent invisible pour laisser passer la transparence
         Visible = false;
         ZIndex = 1;
         Parent = ScreenGui;
@@ -3048,7 +3049,7 @@ function Library:CreateWindow(...)
         BackgroundColor3 = Library.MainColor;
         BorderColor3 = Library.AccentColor;
         BorderSizePixel = 0;
-        BackgroundTransparency = 0.45; -- Effet glass plus prononcé
+        BackgroundTransparency = 0.8; -- Transparence style Matcha (Verre clair)
         Position = UDim2.new(0, 1, 0, 1);
         Size = UDim2.new(1, -2, 1, -2);
         ZIndex = 1;
@@ -3085,7 +3086,7 @@ function Library:CreateWindow(...)
     local MainSectionOuter = Library:Create('Frame', {
         BackgroundColor3 = Library.BackgroundColor;
         BorderColor3 = Library.OutlineColor;
-        BackgroundTransparency = 0.65;
+        BackgroundTransparency = 0.85;
         Position = UDim2.new(0, 52, 0, 25);
         Size = UDim2.new(1, -60, 1, -33);
         ZIndex = 1;
@@ -3115,7 +3116,7 @@ function Library:CreateWindow(...)
 
     local Sidebar = Library:Create('Frame', {
         BackgroundColor3 = Library.BackgroundColor;
-        BackgroundTransparency = 0.85; -- Sidebar Matcha style
+        BackgroundTransparency = 0.95; -- Sidebar quasi invisible (Matcha style)
         Position = UDim2.new(0, 4, 0, 25); -- Commence après la TitleBarFrame
         Size = UDim2.new(0, 44, 1, -33);
         ZIndex = 1;
@@ -3193,6 +3194,7 @@ function Library:CreateWindow(...)
         BackgroundColor3 = Library.MainColor;
         BorderColor3 = Library.OutlineColor;
         Position = UDim2.new(0, 8, 0, 30);
+        BackgroundTransparency = 0.5; -- Transparence du fond des onglets
         Size = UDim2.new(1, -16, 1, -38);
         ZIndex = 2;
         Parent = MainSectionInner;
@@ -3220,7 +3222,7 @@ function Library:CreateWindow(...)
         local TabButton = Library:Create('Frame', {
             BackgroundColor3 = Library.BackgroundColor;
             BorderColor3 = Library.OutlineColor;
-            BackgroundTransparency = 0.5;
+            BackgroundTransparency = 0.8;
             Size = UDim2.new(0, TabButtonWidth + 8 + 4, 1, 0);
             ZIndex = 1;
             Parent = TabArea;
@@ -3344,7 +3346,7 @@ function Library:CreateWindow(...)
             local BoxOuter = Library:Create('Frame', {
                 BackgroundColor3 = Library.BackgroundColor;
                 BorderColor3 = Library.OutlineColor;
-                BackgroundTransparency = 0.4;
+                BackgroundTransparency = 0.7;
                 Size = UDim2.new(1, 0, 0, 0);
                 ZIndex = 2;
                 Parent = Info.Side == 1 and LeftSide or RightSide;
@@ -3736,7 +3738,7 @@ function Library:CreateWindow(...)
                 MainScale.Scale = 0.8
                 TweenService:Create(MainScale, TweenInfo.new(FadeTime, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), { Scale = 1 }):Play()
             end
-            Outer.BackgroundTransparency = 0
+            Outer.BackgroundTransparency = 1 -- Assure que le parent ne bloque pas la vue
 
             task.spawn(function()
                 -- TODO: add cursor fade?
