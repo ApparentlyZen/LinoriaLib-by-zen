@@ -2040,6 +2040,7 @@ do
             ZIndex = 6;
             Parent = SliderOuter;
         });
+        SliderInner.ClipsDescendants = true;
         Library:Create('UICorner', { CornerRadius = UDim.new(1, 0), Parent = SliderInner })
 
         Library:AddToRegistry(SliderInner, {
