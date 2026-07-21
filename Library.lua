@@ -894,15 +894,17 @@ do
         end;
 
         function ColorPicker:Show()
-            for Frame, Val in next, Library.OpenedFrames do
-                if Frame.Name == 'Color' then
+            for Frame, Close in next, Library.OpenedFrames do
+                if type(Close) == 'function' then
+                    Close()
+                else
                     Frame.Visible = false;
                     Library.OpenedFrames[Frame] = nil;
-                end;
+                end
             end;
 
             PickerFrameOuter.Visible = true;
-            Library.OpenedFrames[PickerFrameOuter] = true;
+            Library.OpenedFrames[PickerFrameOuter] = function() ColorPicker:Hide() end;
         end;
 
         function ColorPicker:Hide()
@@ -2523,8 +2525,17 @@ do
         end;
 
         function Dropdown:OpenDropdown()
+            for Frame, Close in next, Library.OpenedFrames do
+                if type(Close) == 'function' then
+                    Close()
+                else
+                    Frame.Visible = false;
+                    Library.OpenedFrames[Frame] = nil;
+                end
+            end;
+
             ListOuter.Visible = true;
-            Library.OpenedFrames[ListOuter] = true;
+            Library.OpenedFrames[ListOuter] = function() Dropdown:CloseDropdown() end;
             DropdownArrow.Rotation = 180;
         end;
 
@@ -3783,6 +3794,16 @@ function Library:CreateWindow(...)
                 TweenService:Create(MainScale, TweenInfo.new(FadeTime, Enum.EasingStyle.Quart, Enum.EasingDirection.In), { Scale = 0.8 }):Play()
             end
             FloatingButton.Visible = true;
+
+            -- Close all opened frames (dropdowns, colorpickers, etc) when menu is hidden
+            for Frame, Close in next, Library.OpenedFrames do
+                if type(Close) == 'function' then
+                    Close()
+                else
+                    Frame.Visible = false;
+                end
+            end;
+            table.clear(Library.OpenedFrames);
         end;
         
         -- Désactiver le flou après l'animation de fermeture
