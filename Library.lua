@@ -573,6 +573,7 @@ do
             ZIndex = 18;
             Parent = HueSelectorOuter;
         });
+        Library:Create('UICorner', { CornerRadius = UDim.new(1, 0), Parent = HueSelectorInner });
 
         local HueCursor = Library:Create('Frame', { 
             BackgroundColor3 = Color3.new(1, 1, 1);
@@ -658,6 +659,7 @@ do
                 ZIndex = 19;
                 Parent = TransparencyBoxOuter;
             });
+        Library:Create('UICorner', { CornerRadius = UDim.new(1, 0), Parent = TransparencyBoxInner });
 
             Library:AddToRegistry(TransparencyBoxInner, { BorderColor3 = 'OutlineColor' });
 
@@ -2088,11 +2090,6 @@ do
             Library:AddToolTip(Info.Tooltip, SliderOuter)
         end
 
-        function Slider:UpdateColors()
-            Fill.BackgroundColor3 = Library.AccentColor;
-            Fill.BorderColor3 = Library.AccentColorDark;
-        end;
-
         function Slider:Display()
             local Suffix = Info.Suffix or '';
 
@@ -2106,8 +2103,6 @@ do
 
             local X = math.ceil(Library:MapValue(Slider.Value, Slider.Min, Slider.Max, 0, Slider.MaxSize));
             Fill.Size = UDim2.new(0, X, 1, 0);
-
-            HideBorderRight.Visible = not (X == Slider.MaxSize or X == 0);
         end;
 
         function Slider:OnChanged(Func)
